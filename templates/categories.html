@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Маркетплейс{% endblock %}
+{% block title %}Аптека{% endblock %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 {% block content %}
     <div>Каталог</div>
 <ul>
     {% for category in data.category %}
-       {% include 'order_element.html' with element=category %}
+        {% include 'order_element.html' with element=category %}
     {% empty %}
         <li>Список пуст</li>
     {% endfor %}

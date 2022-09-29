@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
-
-{% block title %} <div>Каталог №{{ data.id }}</div> {% endblock %}
-
+{% block title %}{{ datas.title }}{% endblock %}
+{% load static %}
 {% block content %}
-    <div>Каталог №{{ data.id }}</div>
-    <div>{{ data.desk }}</div>
+   <div>{{ datas.desk }}</div>
+    {% if datas.id == 1 %}
+        <img src = "{% static 'img/apteka.png' %}">
+    {% endif %}
+     {% if datas.id == 2 %}
+        <img src = "{% static 'img/dost.png' %}">
+    {% endif %}
+     {% if datas.id == 3 %}
+        <img src = "{% static 'img/bot.png' %}">
+    {% endif %}
+
 {% endblock %}

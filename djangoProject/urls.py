@@ -20,5 +20,5 @@ from bmstu_lab import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.GetCategories),
-    path('<int:id>/', views.GetCategory, name='category_url'),
+    path('<str:title><int:id><str:desk>/', views.GetCategory, name='category_url'),
 ]

@@ -1,1 +1,1 @@
-<li><a href="{% url 'category_url' element.id %}">{{ element.title }}</a> </li>
+<li><a href="{% url 'category_url' element.title element.id element.desk %}">{{ element.title }}</a></li>
