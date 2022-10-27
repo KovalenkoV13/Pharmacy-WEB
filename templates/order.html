@@ -1,16 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}{{ datas.title }}{% endblock %}
+{% block title %}{% endblock %}
 {% load static %}
 {% block content %}
-   <div>{{ datas.desk }}</div>
-    {% if datas.id == 1 %}
-        <img src = "{% static 'img/apteka.png' %}">
-    {% endif %}
-     {% if datas.id == 2 %}
-        <img src = "{% static 'img/dost.png' %}">
-    {% endif %}
-     {% if datas.id == 3 %}
-        <img src = "{% static 'img/bot.png' %}">
-    {% endif %}
-
+       <div>
+           <img width=50px, height="50px" src = "{% static 'img/apteka.png' %}">
+           {% for i in good %}
+           <h1>{{ i.name }}</h1>
+               <img src= {% static i.img %} >
+           {% endfor %}
+       </div>
 {% endblock %}

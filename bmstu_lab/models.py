@@ -3,6 +3,9 @@ class Good(models.Model):
     name = models.CharField(primary_key=True, max_length=40)
     description = models.CharField(max_length=1000, blank=True, null=True)
     cost = models.IntegerField(blank=True, null=True)
+    img = models.CharField(max_length=100, blank=True, null=True)
+    time_create = models.DateTimeField(auto_now_add=True)
+    time_update = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
@@ -23,6 +26,8 @@ class Orders(models.Model):
     sum = models.IntegerField(blank=True, null=True)
     addres = models.CharField(max_length=100, blank=True, null=True)
     users = models.ForeignKey('Users', models.DO_NOTHING, db_column='users', blank=True, null=True)
+    time_create = models.DateTimeField(auto_now_add=True)
+    time_update = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
@@ -37,5 +42,3 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
-
-# Create your models here.

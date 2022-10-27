@@ -6,10 +6,6 @@
 {% block content %}
     <div>Каталог</div>
 <ul>
-    {% for category in data.category %}
-        {% include 'order_element.html' with element=category %}
-    {% empty %}
-        <li>Список пуст</li>
-    {% endfor %}
+    <li><a href="{% url 'Catalog' %}">Каталог</a></li>
 </ul>
 {% endblock %}
