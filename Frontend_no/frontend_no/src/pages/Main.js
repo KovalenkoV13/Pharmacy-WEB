@@ -1,11 +1,13 @@
 import React from "react";
 
-
  function Main (){
 
 
      return(
-     <h1>Это наша стартовая страница</h1>
+         <div>
+         <p className="breadcrumb">Главная /</p>
+        <h1>Это наша стартовая страница</h1>
+         </div>
 
      )
  }

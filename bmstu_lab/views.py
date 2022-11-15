@@ -1,6 +1,8 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views.generic.list import ListView
+from django.http import HttpResponse, JsonResponse
+from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -31,7 +33,9 @@ class GoodView(APIView):
             name=request.data["name"],
             description=request.data["description"],
             cost=request.data["cost"],
-            img=request.data["img"]
+            img=request.data["img"],
+            id_cat=request.data["id_cat"],
+            deystvesh=request.data["deystvesh"]
         )
         return Response({'good': model_to_dict(post_new)})
 
@@ -175,6 +179,30 @@ class OGView(APIView):
             return Response({"error": "Object does not exists"})
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
+
+
+
+def GoodViewOne(request, pk):
+    try:
+        good = Good.objects.get(pk=pk)
+    except Good.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = GoodSerializer(good)
+        return JsonResponse(serializer.data,  json_dumps_params={'ensure_ascii': False})
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = GoodSerializer(good, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400,  json_dumps_params={'ensure_ascii': False})
+
+    elif request.method == 'DELETE':
+        good.delete()
+        return HttpResponse(status=204)
 
 class GoodViewSet(viewsets.ModelViewSet):
     queryset = Good.objects.all()

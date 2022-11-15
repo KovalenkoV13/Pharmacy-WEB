@@ -2,10 +2,12 @@ from rest_framework import serializers
 from bmstu_lab.models import *
 
 class GoodSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=40)
-    description = serializers.CharField(max_length=1000)
-    cost = serializers.IntegerField()
+    name = serializers.CharField(max_length=500)
+    brand = serializers.CharField(max_length=1000)
+    cost = serializers.FloatField()
     img = serializers.CharField(max_length=100)
+    id_cat_id = serializers.IntegerField()
+    deystvesh = models.CharField(max_length=100)
 
     def create(self, validated_data):
         return Good.objects.create(**validated_data)
@@ -15,6 +17,8 @@ class GoodSerializer(serializers.Serializer):
         instance.description = validated_data.get("description", instance.description)
         instance.cost = validated_data.get("cost", instance.cost)
         instance.img = validated_data.get("img", instance.img)
+        instance.id_cat = validated_data.get("id_cat", instance.id_cat)
+        instance.deystvesh = validated_data.get("deystvesh", instance.deystvesh)
         instance.save()
         return instance
 

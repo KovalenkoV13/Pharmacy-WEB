@@ -1,6 +1,5 @@
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import apteka from "../static/media/red-cross-11340.png";
-import Breadcrumbs from "./Breadcrumbs";
 import Main from "../pages/Main";
 import Catalog from "../pages/Catalog";
 import {Product} from "../pages/product";
@@ -18,7 +17,6 @@ function NavBar() {
                         <td><Link to="/catalog">Каталог</Link></td>
                     </table>
                 </div>
-                <Breadcrumbs />
                 <Routes>
                     <Route
                         exact path="/"

@@ -4,9 +4,15 @@ import dat from "../components/data"
 import {CardActionArea, CardActions, IconButton} from "@mui/material";
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
+import {Link} from "react-router-dom"
 
 export default function Catalog() {
     return (
+        <div>
+            <div className="breadcrumb">
+            <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
+            / Каталог</p>
+            </div>
         <Row xs={4} md={4} className="g-4">
             {dat().map((data) => {
                 return <Col>
@@ -46,6 +52,7 @@ export default function Catalog() {
                 </Col>
             })}
         </Row>
+        </div>
     );
 }
 

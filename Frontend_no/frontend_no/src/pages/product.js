@@ -1,8 +1,8 @@
 import React from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import dat from "../components/data"
 import {Card, Col, Row} from "react-bootstrap";
-
+import "../static/styles/product.css"
 
 const Product = () => {
 
@@ -10,6 +10,11 @@ const Product = () => {
     for (let i = 0; i < dat().length + 1; i++){
         if (dat()[i].name === id){
             return (
+                <div>
+                <div className="breadcrumb">
+                    <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
+                        / <Link className="Br_Link" to="/catalog">Каталог</Link> / {dat()[i].name}</p>
+                </div>
                 <Row xs={4} md={4} className="g-4">
                 <Col>
                <Card key={dat()[i].name} className="card" border={"light"}>
@@ -24,6 +29,7 @@ const Product = () => {
                     <p>Цена: {dat()[i].cost} руб.</p>
                 </Col>
                 </Row>
+                </div>
             )
         }
     }
