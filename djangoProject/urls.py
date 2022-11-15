@@ -21,6 +21,11 @@ from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
 
+router = routers.DefaultRouter()
+router.register(r'good', views.GoodViewSet)
+router.register(r'orders', views.OrdersViewSet)
+router.register(r'users', views.UsersViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.GetMain, name="Catalog"),

@@ -1,6 +1,7 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
 from django.views.generic.list import ListView
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from bmstu_lab.serializers import *
@@ -175,6 +176,16 @@ class OGView(APIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
+class GoodViewSet(viewsets.ModelViewSet):
+    queryset = Good.objects.all()
+    serializer_class = GoodSerializer
 
+class OrdersViewSet(viewsets.ModelViewSet):
+    queryset = Orders.objects.all()
+    serializer_class = OrdersSerializer
+
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
 
 
