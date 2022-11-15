@@ -1,0 +1,25 @@
+.nav{
+    background-color: #323333;
+    height: 100px;
+    overflow: hidden;
+}
+.apteka{
+    width: 85px;
+    height: 80px;
+    padding-top: 10px;
+    padding-left: 50px;
+
+}
+
+table{
+    text-align: right;
+}
+
+a{
+    text-decoration: none;
+    font-size: 25px;
+}
+
+td {
+    padding-right: 60px;
+}

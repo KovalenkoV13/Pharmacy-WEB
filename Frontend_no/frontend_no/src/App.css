@@ -1,0 +1,79 @@
+html{
+  max-width: 100%;
+}
+
+.App {
+  text-align: center;
+}
+body{
+  background-color: whitesmoke;
+}
+
+Card{
+  border: 4mm ridge rgba(211, 220, 50, .6);
+}
+
+
+.card{
+  background: #222;
+  box-shadow: 0 2px 4px 0 rgba(136, 144, 195, 0.2),
+  0 5px 15px 0 rgba(37, 44, 97, 0.15);
+  margin-bottom: 2rem;
+  z-index: 1;
+  transition: 0.7s;
+}
+
+.card:hover {
+  transform: scale(1.1);
+  z-index: 9;
+  box-shadow: 0 2px 4px 0 darkred,
+  0 5px 15px 0 darkred;
+
+}
+
+.cost {
+  font-size: 28px;
+
+}
+
+.textStyle{
+  color: whitesmoke;
+}
+
+.Text{
+  color: whitesmoke;
+  text-align: center;
+
+}
+
+.card-body{
+  background: #222;
+}
+
+.cardButton {
+  text-decoration: none;
+  display: inline-block;
+  width: 140px;
+  height: 45px;
+  line-height: 45px;
+  border-radius: 45px;
+  margin: 10px 20px;
+  font-size: 11px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 3px;
+  font-weight: 600;
+  color: #222;
+  background: white;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
+  transition: .3s;
+
+}
+
+.cardButton:hover {
+  background: red;
+  box-shadow: 0 15px 20px darkred;
+  color: whitesmoke;
+  transform: translateY(-5px);
+}
+
