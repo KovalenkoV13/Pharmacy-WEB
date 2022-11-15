@@ -11,7 +11,7 @@ const Product = () => {
         if (dat()[i].name === id){
             return (
                 <div>
-                <div className="breadcrumb">
+                <div className="BR">
                     <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
                         / <Link className="Br_Link" to="/catalog">Каталог</Link> / {dat()[i].name}</p>
                 </div>

@@ -5,7 +5,6 @@ import React from "react";
 
      return(
          <div>
-         <p className="breadcrumb">Главная /</p>
         <h1>Это наша стартовая страница</h1>
          </div>
 

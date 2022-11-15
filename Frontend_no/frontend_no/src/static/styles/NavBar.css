@@ -1,25 +1,49 @@
 .nav{
     background-color: #323333;
-    height: 100px;
+    height: 60px;
     overflow: hidden;
 }
 .apteka{
-    width: 85px;
-    height: 80px;
-    padding-top: 10px;
     padding-left: 50px;
 
 }
 
-table{
-    text-align: right;
-}
 
 a{
     text-decoration: none;
     font-size: 25px;
 }
 
-td {
-    padding-right: 60px;
+
+.NavLink{
+    text-decoration: none;
+    color: whitesmoke;
+    font-size: 25px;
+    display: block;
+    padding-top: 10px;
+    padding-left: 30px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    float: left;
+    text-align: center;
+
+}
+
+
+h2{
+    padding-top: 10px;
+    color: firebrick;
+    font-family: Roboto;
+
+}
+
+.LogoLink{
+    text-decoration: none;
 }

@@ -1,45 +1,17 @@
-import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
-import apteka from "../static/media/red-cross-11340.png";
-import Main from "../pages/Main";
-import Catalog from "../pages/Catalog";
-import {Product} from "../pages/product";
+import {Link} from "react-router-dom"
 import "../static/styles/NavBar.css";
 
-function NavBar() {
-
+function NavBar(props) {
     return (
-        <BrowserRouter basename="/" >
             <div>
                 <div className="nav">
-                    <img src={apteka} alt="apteka" className='apteka'/>
-                    <table>
-                        <td><Link to="/">Главная</Link></td>
-                        <td><Link to="/catalog">Каталог</Link></td>
-                    </table>
+                    <Link className="LogoLink" to="/"><h2>Аптека</h2></Link>
+                    <ul>
+                        <li><Link className="NavLink" to="/">Главная</Link></li>
+                        <li><Link className="NavLink" to="/catalog">Каталог</Link></li>
+                    </ul>
                 </div>
-                <Routes>
-                    <Route
-                        exact path="/"
-                        element={<Main />}
-
-                    >
-                    </Route>
-                    <Route
-                        path="/catalog"
-                        element={<Catalog />}
-
-                    >
-                    </Route>
-                    <Route
-                        path="catalog/:id"
-                        element={<Product />}
-
-                    >
-                    </Route>
-                </Routes>
             </div>
-        </BrowserRouter>
-
     );
 }
 

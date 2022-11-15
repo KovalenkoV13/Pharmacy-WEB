@@ -9,7 +9,7 @@ import {Link} from "react-router-dom"
 export default function Catalog() {
     return (
         <div>
-            <div className="breadcrumb">
+            <div className="BR">
             <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
             / Каталог</p>
             </div>
