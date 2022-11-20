@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from bmstu_lab import views
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
@@ -34,5 +34,6 @@ urlpatterns = [
     path('api/good/<str:pk>/', views.GoodViewOne),
     path('api/orders/', views.OrderView.as_view()),
     path('api/users/', views.UserView.as_view()),
+    path('api/category/', views.CategoryView.as_view()),
     path('api/og/', views.OGView.as_view()),
 ]

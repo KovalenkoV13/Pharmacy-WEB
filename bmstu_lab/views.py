@@ -1,13 +1,18 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
+import django_filters.rest_framework
 from django.views.generic.list import ListView
 from django.http import HttpResponse, JsonResponse
+from django_filters.rest_framework import *
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from bmstu_lab.serializers import *
 from bmstu_lab.models import *
+from rest_framework import generics
+
+
 class GoodView(ListView):
     model = Good
     template_name = "order.html"
@@ -23,15 +28,67 @@ def GetMain(request):
 
 #API
 
-class GoodView(APIView):
+
+class CategoryView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+
+
     def get(self, request):
-        good = Good.objects.all().values()
-        return Response({"good": list(good)})
+        cat = Category.objects.all().values()
+        return Response({"cat": list(cat)})
+
+    def post(self, request):
+        post_new = Category.objects.create(
+            id_cat=request.data["id_cat"],
+            name=request.data["name"],
+            description=request.data["description"],
+            img=request.data["img"],
+            prim=request.data["prim"],
+        )
+        return Response({'cat': model_to_dict(post_new)})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method PUT not allowed"})
+
+        try:
+            instance = Category.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object does not exists"})
+
+        serializer = CategorySerializer(instance=instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"put": serializer.data})
+
+    def delete(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method DELETE not allowed"})
+        try:
+            instance = Category.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object does not exists"})
+        instance.delete()
+        return Response({"del": "delete post " + str(pk)})
+
+class GoodView(generics.ListAPIView):
+    queryset = Good.objects.all()
+    serializer_class = GoodSerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ['id_cat_id']
+
+    def get_queryset(self):
+        good = Good.objects.all()
+        return good
 
     def post(self, request):
         post_new = Good.objects.create(
             name=request.data["name"],
-            description=request.data["description"],
+            brand=request.data["brand"],
             cost=request.data["cost"],
             img=request.data["img"],
             id_cat=request.data["id_cat"],

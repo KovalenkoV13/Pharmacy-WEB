@@ -1,6 +1,24 @@
 from rest_framework import serializers
 from bmstu_lab.models import *
 
+
+class CategorySerializer(serializers.Serializer):
+    id_cat = serializers.IntegerField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    prim = serializers.CharField()
+
+    def create(self, validated_data):
+        return Category.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.id_cat = validated_data.get("id_cat", instance.id_cat)
+        instance.name = validated_data.get("name", instance.name)
+        instance.description = validated_data.get("description", instance.description)
+        instance.prim = validated_data.get("prim", instance.prim)
+        instance.save()
+        return instance
+
 class GoodSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=500)
     brand = serializers.CharField(max_length=1000)
