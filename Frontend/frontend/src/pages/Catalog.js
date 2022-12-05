@@ -1,60 +1,67 @@
-import  React, {useState, useEffect} from 'react';
-import {Link, useParams} from "react-router-dom"
-import DataLoading from "../components/DataLoading";
-import List from "../components/data"
-import ListCat from "../components/dataCategory";
-import Pagination from '@mui/material/Pagination';
-
-export default function Catalog() {
-    const {idCat} = useParams();
-    const GoodsLoading = DataLoading(List);
-    const CatLoading = DataLoading(ListCat)
-    const [appState, setAppState] = useState({
-        loading: false,
-        goods: null,
-    });
-    const [appStateCat, setAppStateCat] = useState({
-        loading: false,
-        category: null,
-    });
+import {Link, useParams} from "react-router-dom";
+import {Card, Col, Row} from "react-bootstrap";
+import {CardActionArea, CardActions, IconButton} from "@mui/material";
+import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import {context} from "../App";
+import {useContext, useState} from "react";
 
 
-    useEffect(() => {
-        setAppState({loading: true});
-        fetch(`http://127.0.0.1:8000/api/good/?format=json&id_cat_id=${idCat}`)
-            .then((res) => res.json())
-            .then((goods) => {
-                setAppState({ loading: false, goods: goods });
-            });
-    }, [setAppState]);
+function Catalog(props) {
+    const {state, dispatch} = useContext(context);
+    const {id} = useParams();
+    console.log(id)
+    const [pageNumber, setPageNumber] = useState(1);
 
-    useEffect(() => {
-        setAppStateCat({ loading: true });
-        fetch('http://127.0.0.1:8000/api/category/?format=json')
-            .then((res) => res.json())
-            .then((category) => {
-                setAppStateCat({ loading: false, category: category });
-            });
-    }, [setAppStateCat]);
-
-    console.log(appState.goods)
+    console.log(state.dataCat);
+    console.log(state.dataGoods);
     return (
-        <div className="container">
+      <div className="conteinerCatalog">
             <div className="BR">
-            <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-            / <Link className="Br_Link" to="/catalog">Каталог</Link>
-            / {idCat}
-            </p>
+                <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
+                    / Каталог</p>
             </div>
-            <div className="side-container">
-               <CatLoading isLoading={appStateCat.loading} category={appStateCat.category}/>
-            </div>
-            <div className='data-container'>
-                <GoodsLoading isLoading={appState.loading} goods={appState.goods} />
-            </div>
+            <Row xs={3} md={3} className="g-4">
+                    {state.dataGoods.results.map((data) => {
+                        return <Col>
+                            <Card key={data.name}>
+                                    <div className="c_img">
+                                        <Card.Img className="cardImage" variant="top" src={data.img}/>
+                                    </div>
+                                <Card.Body>
+                                    <div className="Text">
+                                        <div className="textStyle">
+                                            <Card.Title>{data.name}</Card.Title>
+                                        </div>
+                                        <div className="textStyle">
+                                            <Card.Text>
+                                                {data.brand}
+                                            </Card.Text>
+                                        </div>
+                                        <div className="textStyle">
+                                            <Card.Text class="cost">
+                                                {data.cost}₽
+                                            </Card.Text>
+                                        </div>
+                                    </div>
+                                    <div className="actionP">
+                                        <CardActions disableSpacing>
+                                            <IconButton aria-label="add to favorites" color="error">
+                                                <FavoriteTwoToneIcon/>
+                                            </IconButton>
+                                            <IconButton aria-label="add to favorites" color="error">
+                                                <AddShoppingCartOutlinedIcon/>
+                                            </IconButton>
+                                            <Link className="cardButton" to={`/catalog/${data.name}`} > Подробнее</Link>
+                                        </CardActions>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    })};
+                </Row>
 
         </div>
     );
-}
-
-
+};
+export default Catalog;

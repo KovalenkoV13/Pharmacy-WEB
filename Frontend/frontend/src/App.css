@@ -167,6 +167,12 @@ h2{
 
 /*Catalog.js*/
 
+.conteinerCatalog{
+  width: 80%;
+  padding-left: 220px;
+}
+
+
 .side-container{
   height: 300px;
   width: 200px;
@@ -184,3 +190,5 @@ h2{
   position: absolute;
   padding-left: 160px;
 }
+
+

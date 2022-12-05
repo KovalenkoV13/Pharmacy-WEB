@@ -37,7 +37,7 @@ class CategoryView(generics.ListAPIView):
 
     def get(self, request):
         cat = Category.objects.all().values()
-        return Response({"cat": list(cat)})
+        return Response(list(cat))
 
     def post(self, request):
         post_new = Category.objects.create(

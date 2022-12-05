@@ -1,33 +1,31 @@
-import React, {useEffect, useState} from "react"
+import React, {useContext, useReducer} from "react"
 import {Link} from "react-router-dom";
-import DataLoading from "../components/DataLoading";
-import ListCat from "../components/dataCategory"
+import {context} from "../App";
 
-export default function Category(props){
-    const CatLoading = DataLoading(ListCat);
-    const [appState, setAppState] = useState({
-        loading: false,
-        category: null,
-    });
-
-    useEffect(() => {
-        setAppState({ loading: true });
-        fetch('http://127.0.0.1:8000/api/category/?format=json')
-            .then((res) => res.json())
-            .then((category) => {
-                setAppState({ loading: false, category: category });
-            });
-    }, [setAppState]);
-
+function Category(props){
+    const {state, dispatch} = useContext(context);
+    console.log(state.dataGoods)
     return (
+        <>
         <div className="container">
             <div className="BR">
                 <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
                     / Каталог</p>
             </div>
             <div className='data-container'>
-                <CatLoading isLoading={appState.loading} category={appState.category} />
+                <ul className="cat_ul">
+                    {state.dataCat.map((data) => {
+                        return (
+                            <li className="cat_li" key={data.id_cat}>
+                                <Link to={`/catalog/${data.id_cat}`} >{data.name}</Link>
+                            </li>
+                        );
+                    })};
+                </ul>
             </div>
         </div>
+        </>
     );
-}
+};
+
+export default Category;
