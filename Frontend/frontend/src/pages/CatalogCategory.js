@@ -1,29 +1,32 @@
 import {Link, useParams} from "react-router-dom";
+import {useContext, useEffect, useReducer} from "react";
+import axios from "axios";
+import {Context, fetchCat, fetchGood, fetchGoodCat, initialState, Reducer} from "../components/reducer";
 import {Card, Col, Row} from "react-bootstrap";
-import {CardActionArea, CardActions, IconButton} from "@mui/material";
+import {CardActions, IconButton} from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
-import React, {useContext, useState} from "react";
-import {Context} from "../components/reducer";
-import Filtres from "../components/filtres";
-import {useGoods} from "../components/api/query";
+import {useGoodCat} from "../components/api/query";
 
 
-function Catalog(props) {
-    const {state, dispatch} = useContext(Context);
-    const goods = useGoods();
-    const {id} = useParams();
-    const [pageNumber, setPageNumber] = useState(1);
-    return (
-        <>
-            <Filtres />
+
+
+export default function FetchCatalogCategory(props){
+   const {idCat} = useParams()
+    const cat = useGoodCat("2")
+    const [state, dispatch] = useReducer(Reducer,initialState)
+    useEffect(() => {
+        Promise.all([fetchGoodCat(idCat)])
+            .then(function (results) {
+                dispatch({type: 'FETCH_GOOD_CAT', payload: results[0]});
+            });
+    },[]);
+    console.log(state)
+
+    return(
         <div className="conteinerCatalog">
-            <div className="BR">
-                <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-                    / Каталог</p>
-            </div>
             <Row xs={3} md={3} className="g-4">
-                {goods.data.results.map((data) => {
+                {cat.data.results.map((data) => {
                     return <Col>
                         <Card key={data.name}>
                             <div className="c_img">
@@ -61,9 +64,8 @@ function Catalog(props) {
                     </Col>
                 })}
             </Row>
-
         </div>
-        </>
-    );
-};
-export default Catalog;
+
+    )
+
+}

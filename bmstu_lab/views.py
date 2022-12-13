@@ -3,7 +3,6 @@ from django.shortcuts import render
 import django_filters.rest_framework
 from django.views.generic.list import ListView
 from django.http import HttpResponse, JsonResponse
-from django_filters.rest_framework import *
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -11,6 +10,7 @@ from rest_framework.views import APIView
 from bmstu_lab.serializers import *
 from bmstu_lab.models import *
 from rest_framework import generics
+from drf_yasg.utils import swagger_auto_schema
 
 
 class GoodView(ListView):
@@ -26,14 +26,26 @@ def GetMain(request):
     return render(request, 'categories.html')
 
 
-#API
+# Swagger
 
+
+
+
+
+
+
+
+#API
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
+    @swagger_auto_schema(
+        operation_summary="Список категорий",
+        operation_description="Возвращает категории"
+    )
 
     def get(self, request):
         cat = Category.objects.all().values()
@@ -79,8 +91,12 @@ class GoodView(generics.ListAPIView):
     queryset = Good.objects.all()
     serializer_class = GoodSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filterset_fields = ['id_cat_id']
+    filterset_fields = ['name', 'id_cat_id']
 
+    @swagger_auto_schema(
+        operation_summary="Список всех товаров",
+        operation_description="Возвращает все товары",
+    )
     def get_queryset(self):
         good = Good.objects.all()
         return good
@@ -122,7 +138,12 @@ class GoodView(generics.ListAPIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
-class OrderView(APIView):
+class OrderView(generics.ListAPIView):
+
+    @swagger_auto_schema(
+        operation_summary="Список всех заказов",
+        operation_description="Возвращает список всех заказов",
+    )
     def get(self, request):
         order = Orders.objects.all()
         serializer = OrdersSerializer(order, many=True)
@@ -161,7 +182,7 @@ class OrderView(APIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
-class UserView(APIView):
+class UserView(generics.ListAPIView):
     def get(self, request):
         user = Users.objects.all()
         serializer = UserSerializer(user, many=True)
@@ -199,7 +220,7 @@ class UserView(APIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
-class OGView(APIView):
+class OGView(generics.ListAPIView):
     def get(self, request):
         og = Ordergood.objects.all()
         serializer = OrderGoodSerializer(og, many=True)

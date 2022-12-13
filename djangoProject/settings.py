@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bmstu_lab.apps.BmstuLabConfig',
     'rest_framework',
+    'drf_yasg',
 
     'django_filters'
 ]
@@ -138,4 +139,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12
+}
+
+SWAGGER_SETTINGS = {
+   'DEFAULT_INFO': 'import.path.to.urls.api_info',
 }

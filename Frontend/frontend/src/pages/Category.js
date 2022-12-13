@@ -1,20 +1,16 @@
-import React, {useContext, useReducer} from "react"
+import React, {useContext} from "react"
 import {Link} from "react-router-dom";
-import {context} from "../App";
+import {Context} from "../components/reducer";
+import {useCategories} from "../components/api/query";
+
 
 function Category(props){
-    const {state, dispatch} = useContext(context);
-    console.log(state.dataGoods)
+    const category = useCategories()
+    const {state} = useContext(Context);
     return (
         <>
-        <div className="container">
-            <div className="BR">
-                <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-                    / Каталог</p>
-            </div>
-            <div className='data-container'>
                 <ul className="cat_ul">
-                    {state.dataCat.map((data) => {
+                    {category.data.map((data) => {
                         return (
                             <li className="cat_li" key={data.id_cat}>
                                 <Link to={`/catalog/${data.id_cat}`} >{data.name}</Link>
@@ -22,8 +18,6 @@ function Category(props){
                         );
                     })};
                 </ul>
-            </div>
-        </div>
         </>
     );
 };

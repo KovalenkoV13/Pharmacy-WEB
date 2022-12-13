@@ -109,67 +109,56 @@ Card{
 
 /*Navbar.js*/
 
-.nav{
-  background-color: #323333;
-  height: 60px;
-  overflow: hidden;
-}
-.apteka{
-  padding-left: 50px;
 
+#header {
+  position: fixed;
+  display: flex;
+  width: 220px;
+  height: 100%;
 }
 
 
-a{
-  text-decoration: none;
-  font-size: 25px;
+.logotext p {
+  font-size: 20px;
+  color: darkred;
+  background-color: #222222;
 }
 
+.Menu{
+  background-color: #222222;
+}
 
-.NavLink{
-  text-decoration: none;
+.ps-sidebar-root.ps-collapsed.css-1k88rtw{
+  height: 100%;
+  background-color: #222222;
+}
+
+.ps-sidebar-root.css-1k88rtw{
+  height: 100%;
+  background-color: #222222;
+}
+
+.ps-menu-label.css-12w9als{
   color: whitesmoke;
-  font-size: 25px;
-  display: block;
-  padding-top: 10px;
-  padding-left: 30px;
-}
-
-.nav_ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav_li {
-  float: left;
-  text-align: center;
-
 }
 
 
-h2{
-  padding-top: 10px;
-  color: firebrick;
-  font-family: Roboto;
-
+.ps-sidebar-container.css-dip3t8{
+  background-color: #222222;
 }
 
-.LogoLink {
-  text-decoration: none;
-}
 
-/*dataCategory.js*/
-
-.cat_li{
-   text-align: left;
+@media only screen and (max-width: 720px) {
+  html {
+    overflow: hidden;
+  }
 }
 
 /*Catalog.js*/
 
 .conteinerCatalog{
   width: 80%;
-  padding-left: 220px;
+  padding-left: 270px;
 }
 
 
@@ -189,6 +178,31 @@ h2{
   width: 80%;
   position: absolute;
   padding-left: 160px;
+}
+
+/*product.js*/
+
+.containerProduct{
+  width: 80%;
+  padding-left: 270px;
+}
+
+/*filtres.js*/
+
+.filterContainer{
+  position: absolute;
+  right: 0;
+  width: 200px;
+  height: 400px;
+  float: right;
+  margin-top: 70px;
+  margin-right: 20px;
+}
+
+.filterCat{
+  width: 200px;
+  margin-right: 20px;
+  position: relative;
 }
 
 
