@@ -370,7 +370,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     goodList: (
       query?: {
         name?: string;
-        id_cat_id?: string;
+        min_price?: number;
+        max_price?: number;
+        /** A search term. */
+        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
     Menu,
     MenuItem,
@@ -9,11 +9,15 @@ import {
 import { FaList, FaRegHeart } from "react-icons/fa";
 import { FiHome, FiLogIn } from "react-icons/fi";
 import { BiCog } from "react-icons/bi";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import {Link} from "react-router-dom";
+import {Context} from "./reducer";
+import Avatar from '@mui/material/Avatar';
 
 
-const Header = () => {
+const Header = (props) => {
     const { collapseSidebar, collapsed } = useProSidebar();
+    const {state, dispatch} = useContext(Context);
 
     const Collapse = (collapsed) => {
         collapsed ? collapseSidebar(false) : collapseSidebar(true);
@@ -33,21 +37,25 @@ const Header = () => {
                             <p>{collapsed ? "Аптека" : "Аптека"}</p>
                         </div>
 
+                        {state.isLogIn &&<Avatar>H</Avatar>}
+
                         <Menu iconShape="square"
                               menuItemStyles={{
-                            button: ({ level, active, disabled }) => {
-                                // only apply styles on first level elements of the tree
-                                if (level === 0)
-                                    return {
-                                        color: disabled ? "#222222" : "#222222",
-                                        backgroundImage: active ? 'linear-gradient(0deg, red 0%, darkred 100%)' : undefined,
-                                    };
-                            },
+                                  button: ({ level, active, disabled }) => {
+                                      // only apply styles on first level elements of the tree
+                                      if (level === 0)
+                                          return {
+                                              color: disabled ? "#222222" : "#222222",
+                                              backgroundImage: active ? 'linear-gradient(0deg, red 0%, darkred 100%)' : undefined,
+                                          };
+                                  },
 
-                        }}
+                              }}
                         >
                             <MenuItem
-                                routerLink={<Link to={"/"} />}
+                                routerLink={
+                                <Link to={"/"} />
+                            }
                                 icon={<FiHome color={'whitesmoke'} />}
                                 rootStyles={{
                                     ['.' + menuClasses.button]: {
@@ -84,8 +92,11 @@ const Header = () => {
                             >
                                 Избранные
                             </MenuItem>
-                            <MenuItem
-                                icon={<BiCog color={'whitesmoke'} />}
+
+                            {state.isLogIn && <MenuItem
+                                routerLink={
+                                    <Link to={"/shoplist"} />}
+                                icon={<AiOutlineShoppingCart color={'whitesmoke'} />}
                                 rootStyles={{
                                     ['.' + menuClasses.button]: {
                                         '&:hover': {
@@ -94,11 +105,13 @@ const Header = () => {
                                     },
                                 }}
                             >
-                                Настройки
+                                Корзина
                             </MenuItem>
+                            }
                         </Menu>
-                        <Menu iconShape="square">
-                            <MenuItem
+                         <Menu iconShape="square">
+                             {!state.isLogIn && <MenuItem
+                                onClick={() => dispatch({type: 'LOGIN' })}
                                 icon={<FiLogIn color={'whitesmoke'} />}
                                 rootStyles={{
                                     ['.' + menuClasses.button]: {
@@ -109,7 +122,20 @@ const Header = () => {
                                 }}
                             >
                                 LogIn
-                            </MenuItem>
+                            </MenuItem>}
+                             {state.isLogIn && <MenuItem
+                                 onClick={() => dispatch({type: 'LOGOUT' })}
+                                 icon={<FiLogIn color={'whitesmoke'} />}
+                                 rootStyles={{
+                                     ['.' + menuClasses.button]: {
+                                         '&:hover': {
+                                             backgroundImage: 'linear-gradient(0deg, red 0%, darkred 100%)',
+                                         },
+                                     },
+                                 }}
+                             >
+                                 LogOut
+                             </MenuItem>}
                         </Menu>
                     </div>
                 </Sidebar>

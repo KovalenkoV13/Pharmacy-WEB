@@ -11,7 +11,9 @@ from bmstu_lab.serializers import *
 from bmstu_lab.models import *
 from rest_framework import generics
 from drf_yasg.utils import swagger_auto_schema
-
+from rest_framework import filters
+from django_filters import FilterSet, AllValuesFilter, rest_framework
+from django_filters import DateTimeFilter, NumberFilter
 
 class GoodView(ListView):
     model = Good
@@ -24,12 +26,6 @@ def GetCatalog(request):
 
 def GetMain(request):
     return render(request, 'categories.html')
-
-
-# Swagger
-
-
-
 
 
 
@@ -87,11 +83,28 @@ class CategoryView(generics.ListAPIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
-class GoodView(generics.ListAPIView):
+
+class GoodFilter(FilterSet):
+    min_price = NumberFilter(field_name='cost', lookup_expr='gte')
+    max_price = NumberFilter(field_name='cost', lookup_expr='lte')
+    class Meta:
+        model = Good
+        fields = [
+            'name',
+            'min_price',
+            'max_price'
+        ]
+
+
+class GoodView(generics.ListCreateAPIView):
     queryset = Good.objects.all()
     serializer_class = GoodSerializer
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filterset_fields = ['name', 'id_cat_id']
+    filter_backends = (rest_framework.DjangoFilterBackend, filters.SearchFilter)
+    filterset_class = GoodFilter
+    search_fields = ["name"]
+
+
+
 
     @swagger_auto_schema(
         operation_summary="Список всех товаров",

@@ -1,4 +1,4 @@
-html{
+.html{
   max-width: 100%;
 }
 
@@ -105,6 +105,21 @@ Card{
   height: 293px;
 }
 
+.minCost{
+  display: inline-block;
+}
+
+.maxCost{
+  display: inline-block;
+}
+
+.inputCost{
+  margin-bottom: 10px;
+}
+
+.inputForm{
+  margin-bottom: 50px;
+}
 
 
 /*Navbar.js*/
@@ -117,6 +132,10 @@ Card{
   height: 100%;
 }
 
+.MuiAvatar-root.MuiAvatar-circular.MuiAvatar-colorDefault.css-2s90m6-MuiAvatar-root{
+  margin-left: 20px;
+  margin-bottom: 2px;
+}
 
 .logotext p {
   font-size: 20px;
@@ -204,5 +223,4 @@ Card{
   margin-right: 20px;
   position: relative;
 }
-
 
