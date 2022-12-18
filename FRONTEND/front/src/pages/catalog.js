@@ -1,7 +1,7 @@
-import React, {useContext, useReducer, useState} from "react";
+import React, {useContext, useEffect, useReducer, useState} from "react";
 import {Link} from "react-router-dom";
 import {Card, Col, Row, Spinner,Button} from "react-bootstrap";
-import {CardActions, IconButton, Popover, Snackbar} from "@mui/material";
+import {CardActions, IconButton, Snackbar} from "@mui/material";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { Api } from "../components/api/pharmacyApi.ts";
@@ -23,17 +23,6 @@ const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =
     return res
 }
 
-const getGood = async (name ='' ) =>{
-    const res = await api.good.goodList({
-        name: `${name}`
-    })
-        .then((response) => {
-            return response.data;
-        }).catch(()=>{
-            return {count:0, results:[]}
-        })
-    return res
-}
 
 function Catalog(props) {
     const {state, dispatch} = useContext(Context);
@@ -43,7 +32,7 @@ function Catalog(props) {
     const [max, setMax] = useState(20000);
     const [loading, setLoading] = useState(false)
     const [good, setGood] = useState([])
-    const [add, setAdd] = useState("error")
+    // const [add, setAdd] = useState("error")
     const [open, setOpen] = useState(false);
 
 
@@ -53,9 +42,8 @@ function Catalog(props) {
         await setLoading(true);
         const { results } = await getGoods('', min, max, searchValue);
         await setGood(results);
-        await setLoading(false)
+        await setLoading(false);
     }
-
 
     const handleAdd = async () =>{
         setOpen(true);
@@ -89,7 +77,7 @@ function Catalog(props) {
                         <h5>До</h5> <input type={"number"} value={max} onChange={(event => setMax(event.target.value))}/>
                     </div>
                 </div>
-                    <Button variant={"dark"} className={"buttonSearch"} disabled={loading} onClick={handleSearch}>Искать</Button>
+                    <Button variant={"dark"} className={"buttonSearch"} disabled={loading}  onClick={handleSearch}>Искать</Button>
                 </div>
                 {!good.length && <div>
                     <h1>К сожалению, пока ничего не найдено 🥲</h1>
@@ -97,7 +85,7 @@ function Catalog(props) {
                 {good.length && <Row xs={3} md={3} className="g-4">
                     {good.map((data) => {
                         console.log(state)
-                        return <Col>
+                        return <Col className={data.name}>
                             <Snackbar
                                 open={open}
                                 anchorOrigin={ {vertical: 'bottom', horizontal: 'right'} }

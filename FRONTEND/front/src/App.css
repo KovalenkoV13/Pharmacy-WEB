@@ -132,6 +132,16 @@ Card{
   height: 100%;
 }
 
+.Avatar{
+  display: flex;
+}
+
+.Avatar p{
+  color: whitesmoke;
+  margin-top: 6px;
+  margin-left: 50px;
+}
+
 .MuiAvatar-root.MuiAvatar-circular.MuiAvatar-colorDefault.css-2s90m6-MuiAvatar-root{
   margin-left: 20px;
   margin-bottom: 2px;
@@ -222,5 +232,51 @@ Card{
   width: 200px;
   margin-right: 20px;
   position: relative;
+}
+
+/*shoplist.js*/
+.shoplistProd{
+  display: flex;
+  border-style: solid;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  min-height: 240px;
+  max-width: 50%;
+  background: white;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
+}
+
+.imgShoplist{
+  min-height: 240px;
+  width: auto;
+}
+.descriptionShoplist{
+  display: block;
+}
+
+.Suma{
+  display: inline-block;
+  border-style: solid;
+  border-radius: 3px;
+  width: 300px;
+  height: auto;
+  background: white;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
+  position: absolute;
+  margin-left: 80px;
+}
+.Suma h4{
+  left: 0;
+}
+
+.Suma p{
+  text-align: left;
+}
+
+
+.containerShoplist{
+  display: block;
+  width: 90%;
+  padding-left: 270px;
 }
 

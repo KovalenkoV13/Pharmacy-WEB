@@ -1,6 +1,4 @@
 import React, {createContext, useEffect, useReducer} from "react";
-import axios from "axios";
-import product from "../pages/product";
 
 export const Context = createContext();
 export const initialState = {
@@ -13,12 +11,17 @@ export const Reducer = (state, action) => {
         case 'PRODUCT':
             return {
                 product: [...action.payload,...state.product],
-                isLogIn: state.isLogIn
+                isLogIn: state.isLogIn,
+            };
+        case 'DELETE_PRODUCT':
+            return {
+                product: state.product.filter(item => item.name !== action.payload),
+                isLogIn: state.isLogIn,
             };
         case 'LOGIN':
             return {
                 isLogIn: true,
-                product: state.product
+                product: state.product,
             };
         case 'LOGOUT':
             return {

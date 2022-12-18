@@ -37,7 +37,12 @@ const Header = (props) => {
                             <p>{collapsed ? "Аптека" : "Аптека"}</p>
                         </div>
 
-                        {state.isLogIn &&<Avatar>H</Avatar>}
+                        {state.isLogIn &&
+                            <div className={"Avatar"}>
+                                <Avatar>П</Avatar>
+                                <p>{collapsed ? undefined : "Пользователь"}</p>
+                            </div>
+                        }
 
                         <Menu iconShape="square"
                               menuItemStyles={{
