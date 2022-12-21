@@ -9,6 +9,21 @@
  * ---------------------------------------------------------------
  */
 
+export interface Cart {
+  /**
+   * Name
+   * @minLength 1
+   */
+  name: string;
+  /** Cost */
+  cost: number;
+  /**
+   * Img
+   * @minLength 1
+   */
+  img: string;
+}
+
 export interface Category {
   /** Id cat */
   id_cat: number;
@@ -270,6 +285,186 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl http://127.0.0.1:8000/api
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  cart = {
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartList
+     * @request GET:/cart/
+     * @secure
+     */
+    cartList: (
+      query?: {
+        /** A page number within the paginated result set. */
+        page?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          count: number;
+          /** @format uri */
+          next?: string | null;
+          /** @format uri */
+          previous?: string | null;
+          results: Cart[];
+        },
+        any
+      >({
+        path: `/cart/`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartCreate
+     * @request POST:/cart/
+     * @secure
+     */
+    cartCreate: (data: Cart, params: RequestParams = {}) =>
+      this.request<Cart, any>({
+        path: `/cart/`,
+        method: "POST",
+        body: data,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartUpdate
+     * @request PUT:/cart/
+     * @secure
+     */
+    cartUpdate: (data: Cart, params: RequestParams = {}) =>
+      this.request<Cart, any>({
+        path: `/cart/`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartDelete
+     * @request DELETE:/cart/
+     * @secure
+     */
+    cartDelete: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/cart/`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartRead
+     * @request GET:/cart/{name}/
+     * @secure
+     */
+    cartRead: (
+      name: string,
+      query?: {
+        /** A page number within the paginated result set. */
+        page?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          count: number;
+          /** @format uri */
+          next?: string | null;
+          /** @format uri */
+          previous?: string | null;
+          results: Cart[];
+        },
+        any
+      >({
+        path: `/cart/${name}/`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartCreate2
+     * @request POST:/cart/{name}/
+     * @originalName cartCreate
+     * @duplicate
+     * @secure
+     */
+    cartCreate2: (name: string, data: Cart, params: RequestParams = {}) =>
+      this.request<Cart, any>({
+        path: `/cart/${name}/`,
+        method: "POST",
+        body: data,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartUpdate2
+     * @request PUT:/cart/{name}/
+     * @originalName cartUpdate
+     * @duplicate
+     * @secure
+     */
+    cartUpdate2: (name: string, data: Cart, params: RequestParams = {}) =>
+      this.request<Cart, any>({
+        path: `/cart/${name}/`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags cart
+     * @name CartDelete2
+     * @request DELETE:/cart/{name}/
+     * @originalName cartDelete
+     * @duplicate
+     * @secure
+     */
+    cartDelete2: (name: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/cart/${name}/`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+  };
   category = {
     /**
      * @description Возвращает категории

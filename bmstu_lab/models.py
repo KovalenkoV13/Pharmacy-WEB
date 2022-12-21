@@ -50,9 +50,23 @@ class Orders(models.Model):
 class Users(models.Model):
     login = models.CharField(primary_key=True, max_length=40)
     password = models.CharField(max_length=40, blank=True, null=True)
+    name = models.CharField(max_length=40, blank=True, null=True)
+    lastname = models.CharField(max_length=60, blank=True, null=True)
+    number = models.CharField(max_length=11, blank=True, null=True)
+    email = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'users'
+
+class Cart(models.Model):
+    name = models.CharField(primary_key=True, max_length=100)
+    cost = models.BigIntegerField(blank=True, null=True)
+    img = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'cart'
+
 
 

@@ -19,6 +19,22 @@ class CategorySerializer(serializers.Serializer):
         instance.save()
         return instance
 
+
+class CartSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    cost = serializers.IntegerField()
+    img = serializers.CharField()
+
+    def create(self, validated_data):
+        return Cart.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get("name", instance.name)
+        instance.cost = validated_data.get("cost", instance.cost)
+        instance.img = validated_data.get("img", instance.img)
+        instance.save()
+        return instance
+
 class GoodSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=500)
     brand = serializers.CharField(max_length=1000)

@@ -5,8 +5,6 @@ import "./App.css"
 import Product from "./pages/product";
 import NavBar from "./components/sidebar";
 import Catalog from "./pages/catalog"
-import { QueryClientProvider, QueryClient } from "react-query";
-import ITunesPage from "./pages/itunes";
 import {Context, Reducer, initialState} from "./components/reducer";
 import Shoplist from "./pages/shoplist";
 
@@ -49,14 +47,6 @@ function App() {
             >
             </Route>
 
-              <Route
-                  path="/itunes/"
-                  element={
-                          <ITunesPage />
-                  }
-
-              >
-              </Route>
               <Route
                   path="/shoplist/"
                   element={

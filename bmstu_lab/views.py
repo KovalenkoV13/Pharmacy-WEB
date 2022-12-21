@@ -1,6 +1,8 @@
 from django.forms import model_to_dict
 from django.shortcuts import render
 import django_filters.rest_framework
+from django.views import csrf
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic.list import ListView
 from django.http import HttpResponse, JsonResponse
 from rest_framework.parsers import JSONParser
@@ -12,8 +14,16 @@ from bmstu_lab.models import *
 from rest_framework import generics
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters
-from django_filters import FilterSet, AllValuesFilter, rest_framework
-from django_filters import DateTimeFilter, NumberFilter
+from django_filters import FilterSet, rest_framework
+from django_filters import NumberFilter
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+csrf_exempt
+
 
 class GoodView(ListView):
     model = Good
@@ -32,6 +42,29 @@ def GetMain(request):
 
 
 #API
+
+
+def auth_view(request):
+    username = request.POST["username"]
+    password = request.POST["password"]
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return HttpResponse("{'status': 'ok'}")
+    else:
+        return HttpResponse("{'status': 'error', 'error': 'login failed'}")
+
+
+class ExampleView(APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        content = {
+            'user': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
+        }
+        return Response(content)
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
@@ -195,6 +228,48 @@ class OrderView(generics.ListAPIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
+
+class CartView(generics.ListAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+    def get(self, request, *args, **kwargs):
+        cart = Cart.objects.all()
+        serializer = CartSerializer(cart, many=True)
+        return Response({"cart": serializer.data})
+
+    def post(self, request):
+        post_new = Cart.objects.create(
+            name=request.data["name"],
+            cost=request.data["cost"],
+            img=request.data["img"])
+        return Response({'order': model_to_dict(post_new)})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method PUT not allowed"})
+
+        try:
+            instance = Cart.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object does not exists"})
+
+        serializer = CartSerializer(instance=instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"put": serializer.data})
+
+    def delete(self, request, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method DELETE not allowed"})
+        try:
+            instance = Cart.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object does not exists"})
+        instance.delete()
+        return Response({"del": "delete post " + str(pk)})
+
 class UserView(generics.ListAPIView):
     def get(self, request):
         user = Users.objects.all()
@@ -279,6 +354,7 @@ def GoodViewOne(request, pk):
     except Good.DoesNotExist:
         return HttpResponse(status=404)
 
+
     if request.method == 'GET':
         serializer = GoodSerializer(good)
         return JsonResponse(serializer.data,  json_dumps_params={'ensure_ascii': False})
@@ -295,6 +371,33 @@ def GoodViewOne(request, pk):
         good.delete()
         return HttpResponse(status=204)
 
+
+@csrf_exempt
+def CartViewOne(request, pk):
+
+    try:
+        cart = Cart.objects.get(pk=pk)
+    except Cart.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer_class = CartSerializer
+
+
+    if request.method == 'GET':
+        serializer = CartSerializer(cart)
+        return JsonResponse(serializer.data,  json_dumps_params={'ensure_ascii': False})
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = CartSerializer(cart, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400,  json_dumps_params={'ensure_ascii': False})
+
+    elif request.method == 'DELETE':
+        cart.delete()
+        return HttpResponse(status=204)
 class GoodViewSet(viewsets.ModelViewSet):
     queryset = Good.objects.all()
     serializer_class = GoodSerializer

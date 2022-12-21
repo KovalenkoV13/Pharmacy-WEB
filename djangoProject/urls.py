@@ -31,6 +31,8 @@ urlpatterns = [
     path('', views.GetMain, name="Catalog"),
     path('catalog/', views.GetCatalog, name="Catalog"),
     path('api/good/', views.GoodView.as_view()),
+    path('api/cart/', views.CartView.as_view()),
+    path('api/cart/<str:pk>/', views.CartView.as_view()),
     path('api/good/<str:pk>/', views.GoodViewOne),
     path('api/orders/', views.OrderView.as_view()),
     path('api/users/', views.UserView.as_view()),

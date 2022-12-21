@@ -3,7 +3,8 @@ import React, {createContext, useEffect, useReducer} from "react";
 export const Context = createContext();
 export const initialState = {
     product: [],
-    isLogIn: false
+    isLogIn: false,
+    order: []
 };
 
 export const Reducer = (state, action) => {
@@ -24,6 +25,11 @@ export const Reducer = (state, action) => {
                 product: state.product,
             };
         case 'LOGOUT':
+            return {
+                isLogIn: false,
+                product: []
+            };
+        case 'ORDER':
             return {
                 isLogIn: false,
                 product: []

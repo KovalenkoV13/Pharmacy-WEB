@@ -24,16 +24,38 @@ const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =
 }
 
 
+
+
+const createCart = async (name, cost, img) =>{
+    const res = await api.cart.cartCreate(
+        {
+            name: `${name}`,
+            cost: `${cost}`,
+            img: `${img}`
+        },
+        {headers:{'content-type': 'application/json'}}
+    )
+        .then((response) => {
+            return response.data;
+        }).catch(()=>{
+            return {count:0, results:[]}
+        })
+    return res
+}
+
+
+
+
 function Catalog(props) {
     const {state, dispatch} = useContext(Context);
-    const [searchValue, setSearchValue] = useState('Супра');
-    const [product, setProduct] = useState('');
+    const [searchValue, setSearchValue] = useState('Терафлю');
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(20000);
-    const [loading, setLoading] = useState(false)
-    const [good, setGood] = useState([])
+    const [loading, setLoading] = useState(false);
+    const [good, setGood] = useState([]);
     // const [add, setAdd] = useState("error")
     const [open, setOpen] = useState(false);
+
 
 
 
@@ -84,7 +106,6 @@ function Catalog(props) {
                 </div>}
                 {good.length && <Row xs={3} md={3} className="g-4">
                     {good.map((data) => {
-                        console.log(state)
                         return <Col className={data.name}>
                             <Snackbar
                                 open={open}
@@ -120,7 +141,7 @@ function Catalog(props) {
                                             </IconButton>}
                                             {state.isLogIn && <IconButton
                                                 aria-label="add to shoplist"
-                                                onClick={() => {dispatch({type: 'PRODUCT', payload: [data]}); handleAdd()}}
+                                                onClick={() => {createCart(data.name,data.cost,data.img); handleAdd()}}
                                                 color="error"
                                             >
                                                 <AddShoppingCartOutlinedIcon/>
