@@ -154,7 +154,7 @@ class GoodView(generics.ListCreateAPIView):
             cost=request.data["cost"],
             img=request.data["img"],
             id_cat=request.data["id_cat"],
-            deystvesh=request.data["deystvesh"]
+            vest=request.data["vest"],
         )
         return Response({'good': model_to_dict(post_new)})
 
@@ -271,6 +271,8 @@ class CartView(generics.ListAPIView):
         return Response({"del": "delete post " + str(pk)})
 
 class UserView(generics.ListAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UserSerializer
     def get(self, request):
         user = Users.objects.all()
         serializer = UserSerializer(user, many=True)
@@ -278,8 +280,14 @@ class UserView(generics.ListAPIView):
 
     def post(self, request):
         post_new = Users.objects.create(
-            login=request.data["login"],
-            password=request.data["password"])
+            username=request.data["username"],
+            password=request.data["password"],
+            lastname=request.data["lastname"],
+            number=request.data["number"],
+            email=request.data["email"],
+
+        )
+
         return Response({'user': model_to_dict(post_new)})
 
     def put(self, request, *args, **kwargs):

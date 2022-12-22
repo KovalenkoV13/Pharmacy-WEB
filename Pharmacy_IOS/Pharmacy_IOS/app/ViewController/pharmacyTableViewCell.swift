@@ -2,8 +2,10 @@
 //  pharmacyTableViewCell.swift
 //  Pharmacy_IOS
 //
-//  Created by Влад Коваленко on 04.12.2022.
+//  Created by Влад Коваленко on 22.12.2022.
 //
+
+import Foundation
 
 import Foundation
 import UIKit
@@ -11,6 +13,7 @@ import UIKit
 final class pharmacyTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -18,8 +21,7 @@ final class pharmacyTableViewCell: UITableViewCell {
     }
     
     func configure(withModel goods: Goods) {
-        textLabel?.text = goods.good.name
+        textLabel?.text = goods.results.first?.name
         }
 }
-
 

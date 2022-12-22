@@ -41,7 +41,7 @@ class GoodSerializer(serializers.Serializer):
     cost = serializers.FloatField()
     img = serializers.CharField(max_length=100)
     id_cat_id = serializers.IntegerField()
-    deystvesh = models.CharField(max_length=100)
+    vest = models.CharField(max_length=100)
 
     def create(self, validated_data):
         return Good.objects.create(**validated_data)
@@ -52,7 +52,7 @@ class GoodSerializer(serializers.Serializer):
         instance.cost = validated_data.get("cost", instance.cost)
         instance.img = validated_data.get("img", instance.img)
         instance.id_cat = validated_data.get("id_cat", instance.id_cat)
-        instance.deystvesh = validated_data.get("deystvesh", instance.deystvesh)
+        instance.vest = validated_data.get("vest", instance.vest)
         instance.save()
         return instance
 
@@ -76,8 +76,12 @@ class OrdersSerializer(serializers.Serializer):
         return instance
 
 class UserSerializer(serializers.Serializer):
-    login = serializers.CharField(max_length=40)
+    username = serializers.CharField(max_length=40)
     password = serializers.CharField(max_length=40)
+    name = serializers.CharField(max_length=40)
+    lastname = serializers.CharField(max_length=60)
+    number = serializers.CharField(max_length=11)
+    email = serializers.CharField(max_length=50)
 
     def create(self, validated_data):
         return Users.objects.create(**validated_data)
@@ -85,6 +89,10 @@ class UserSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.login = validated_data.get("login", instance.login)
         instance.password = validated_data.get("password", instance.password)
+        instance.name = validated_data.get("name", instance.name)
+        instance.lastname = validated_data.get("lastname", instance.lastname)
+        instance.number = validated_data.get("number", instance.number)
+        instance.email = validated_data.get("email", instance.email)
         instance.save()
         return instance
 

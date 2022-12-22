@@ -28,8 +28,16 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     path('admin/', admin.site.urls),
+
     path('', views.GetMain, name="Catalog"),
     path('catalog/', views.GetCatalog, name="Catalog"),
+
+
+
+    path('api/auth/', include('rest_framework.urls')),
+
+
+
     path('api/good/', views.GoodView.as_view()),
     path('api/cart/', views.CartView.as_view()),
     path('api/cart/<str:pk>/', views.CartView.as_view()),

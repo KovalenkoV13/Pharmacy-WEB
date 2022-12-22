@@ -7,20 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		981056FB295487E40019BBBB /* pharmacyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981056FA295487E40019BBBB /* pharmacyTableViewCell.swift */; };
+		981056FD295489740019BBBB /* PharmacyInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981056FC295489740019BBBB /* PharmacyInfoViewController.swift */; };
+		981057032954B2BC0019BBBB /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981057022954B2BC0019BBBB /* ApiService.swift */; };
+		981057052954B30B0019BBBB /* ApiServiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981057042954B30B0019BBBB /* ApiServiceHelper.swift */; };
 		987C4BB6293CFA07005A7770 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BB5293CFA07005A7770 /* AppDelegate.swift */; };
 		987C4BB8293CFA07005A7770 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BB7293CFA07005A7770 /* SceneDelegate.swift */; };
 		987C4BBA293CFA07005A7770 /* PharmacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BB9293CFA07005A7770 /* PharmacyViewController.swift */; };
 		987C4BBD293CFA07005A7770 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 987C4BBB293CFA07005A7770 /* Main.storyboard */; };
 		987C4BBF293CFA08005A7770 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 987C4BBE293CFA08005A7770 /* Assets.xcassets */; };
 		987C4BC2293CFA08005A7770 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 987C4BC0293CFA08005A7770 /* LaunchScreen.storyboard */; };
-		987C4BCE293D0866005A7770 /* pharmacyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BCD293D0866005A7770 /* pharmacyTableViewCell.swift */; };
 		987C4BD0293D0B09005A7770 /* GoodsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BCF293D0B09005A7770 /* GoodsModel.swift */; };
-		987C4BD2293D0ED0005A7770 /* ApiServiceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BD1293D0ED0005A7770 /* ApiServiceHelper.swift */; };
-		987C4BD4293D12FC005A7770 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987C4BD3293D12FC005A7770 /* ApiService.swift */; };
-		98B5A9E8293DE8DE002F2374 /* PharmacyInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B5A9E7293DE8DE002F2374 /* PharmacyInfoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		981056FA295487E40019BBBB /* pharmacyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pharmacyTableViewCell.swift; sourceTree = "<group>"; };
+		981056FC295489740019BBBB /* PharmacyInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PharmacyInfoViewController.swift; sourceTree = "<group>"; };
+		981057022954B2BC0019BBBB /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		981057042954B30B0019BBBB /* ApiServiceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiServiceHelper.swift; sourceTree = "<group>"; };
 		987C4BB2293CFA07005A7770 /* Pharmacy_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pharmacy_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		987C4BB5293CFA07005A7770 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		987C4BB7293CFA07005A7770 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -29,11 +33,7 @@
 		987C4BBE293CFA08005A7770 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		987C4BC1293CFA08005A7770 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		987C4BC3293CFA08005A7770 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		987C4BCD293D0866005A7770 /* pharmacyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pharmacyTableViewCell.swift; sourceTree = "<group>"; };
 		987C4BCF293D0B09005A7770 /* GoodsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodsModel.swift; sourceTree = "<group>"; };
-		987C4BD1293D0ED0005A7770 /* ApiServiceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiServiceHelper.swift; sourceTree = "<group>"; };
-		987C4BD3293D12FC005A7770 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
-		98B5A9E7293DE8DE002F2374 /* PharmacyInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PharmacyInfoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,8 +87,8 @@
 			isa = PBXGroup;
 			children = (
 				987C4BB9293CFA07005A7770 /* PharmacyViewController.swift */,
-				987C4BCD293D0866005A7770 /* pharmacyTableViewCell.swift */,
-				98B5A9E7293DE8DE002F2374 /* PharmacyInfoViewController.swift */,
+				981056FA295487E40019BBBB /* pharmacyTableViewCell.swift */,
+				981056FC295489740019BBBB /* PharmacyInfoViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -97,8 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				987C4BCF293D0B09005A7770 /* GoodsModel.swift */,
-				987C4BD1293D0ED0005A7770 /* ApiServiceHelper.swift */,
-				987C4BD3293D12FC005A7770 /* ApiService.swift */,
+				981057022954B2BC0019BBBB /* ApiService.swift */,
+				981057042954B30B0019BBBB /* ApiServiceHelper.swift */,
 			);
 			path = apiService;
 			sourceTree = "<group>";
@@ -185,13 +185,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				981056FB295487E40019BBBB /* pharmacyTableViewCell.swift in Sources */,
 				987C4BBA293CFA07005A7770 /* PharmacyViewController.swift in Sources */,
+				981056FD295489740019BBBB /* PharmacyInfoViewController.swift in Sources */,
 				987C4BB6293CFA07005A7770 /* AppDelegate.swift in Sources */,
-				987C4BD2293D0ED0005A7770 /* ApiServiceHelper.swift in Sources */,
-				987C4BCE293D0866005A7770 /* pharmacyTableViewCell.swift in Sources */,
+				981057052954B30B0019BBBB /* ApiServiceHelper.swift in Sources */,
 				987C4BD0293D0B09005A7770 /* GoodsModel.swift in Sources */,
-				987C4BD4293D12FC005A7770 /* ApiService.swift in Sources */,
-				98B5A9E8293DE8DE002F2374 /* PharmacyInfoViewController.swift in Sources */,
+				981057032954B2BC0019BBBB /* ApiService.swift in Sources */,
 				987C4BB8293CFA07005A7770 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,6 +347,8 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos*]" = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -378,6 +380,8 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos*]" = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

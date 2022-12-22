@@ -2,7 +2,7 @@
 //  ApiServiceHelper.swift
 //  Pharmacy_IOS
 //
-//  Created by Влад Коваленко on 04.12.2022.
+//  Created by Влад Коваленко on 22.12.2022.
 //
 
 import Foundation
@@ -33,6 +33,6 @@ func configureURLRequest(good: String) -> URLRequest {
     }
 
     request = URLRequest(url: url)
-    request.httpMethod = ApiMethods.post.rawValue // устанавливаем метод запроса через enum
+    request.httpMethod = ApiMethods.get.rawValue // устанавливаем метод запроса через enum
     return request
 }

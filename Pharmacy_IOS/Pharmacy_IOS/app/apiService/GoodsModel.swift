@@ -8,16 +8,14 @@
 import Foundation
 
 struct Goods: Codable {
-    var good: Good
-    
+    let results: [Good]
 }
 
 struct Good: Codable {
-    var name: String
-    var brand: String
-    var cost: Float
-    var img: String
-    var id_cat_id: Int
-    var deystvesh: String
+    let name: String
+    let brand: String
+    let cost: Float
+    let img: String
+    let id_cat_id: Int
 }
 

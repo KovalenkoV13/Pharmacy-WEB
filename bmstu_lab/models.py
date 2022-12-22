@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import models as user_models
+from django.contrib.auth.models import PermissionsMixin
+
 
 class Category(models.Model):
     id_cat = models.AutoField(primary_key=True)
@@ -18,7 +21,7 @@ class Good(models.Model):
     time_create = models.DateField(blank=True, null=True)
     time_update = models.DateField(blank=True, null=True)
     id_cat = models.ForeignKey(Category, models.DO_NOTHING, db_column='id_cat', blank=True, null=True)
-    deystvesh = models.CharField(max_length=100, blank=True, null=True)
+    vest = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -48,7 +51,7 @@ class Orders(models.Model):
 
 
 class Users(models.Model):
-    login = models.CharField(primary_key=True, max_length=40)
+    username = models.CharField(max_length=40, blank=True, null=True)
     password = models.CharField(max_length=40, blank=True, null=True)
     name = models.CharField(max_length=40, blank=True, null=True)
     lastname = models.CharField(max_length=60, blank=True, null=True)
@@ -58,6 +61,17 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
+
+# class Users(user_models.AbstractBaseUser, PermissionsMixin):
+#     username = models.CharField(max_length=40, unique=True)
+#     password = models.CharField(max_length=40, blank=True, null=True)
+#     name = models.CharField(max_length=40, blank=True, null=True)
+#     lastname = models.CharField(max_length=60, blank=True, null=True)
+#     number = models.CharField(max_length=11, blank=True, null=True)
+#     email = models.CharField(max_length=50, blank=True, null=True)
+#
+#     USERNAME_FIELD = 'username'
+
 
 class Cart(models.Model):
     name = models.CharField(primary_key=True, max_length=100)
