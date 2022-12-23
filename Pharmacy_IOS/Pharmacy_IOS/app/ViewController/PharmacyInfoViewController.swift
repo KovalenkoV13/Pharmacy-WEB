@@ -34,6 +34,7 @@ final class PharmacyInfoViewController: UIViewController {
     private let imageView = UIImageView()
     private let brandLabel = UILabel()
     private let costLabel = UILabel()
+    private let nameLabel = UILabel()
     
     private var goodsDataInfo: Goods
     
@@ -60,14 +61,21 @@ final class PharmacyInfoViewController: UIViewController {
 
     
     private func configureDataElements() {
-       
+        nameLabel.lineBreakMode = .byWordWrapping
+        nameLabel.numberOfLines = 0
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        nameLabel.textColor = .black
+        view.addSubview(nameLabel)
+        
+        
         costLabel.translatesAutoresizingMaskIntoConstraints = false
-        costLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        costLabel.font = UIFont.systemFont(ofSize: 20)
         costLabel.textColor = .black
         view.addSubview(costLabel)
         
         brandLabel.translatesAutoresizingMaskIntoConstraints = false
-        brandLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        brandLabel.font = UIFont.systemFont(ofSize: 20)
         brandLabel.textColor = .black
         view.addSubview(brandLabel)
         
@@ -75,21 +83,28 @@ final class PharmacyInfoViewController: UIViewController {
         view.addSubview(imageView)
         imageView.heightAnchor.constraint(equalToConstant: 240).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 240).isActive = true
-        imageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5).isActive = true
+        imageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 70).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         
+        nameLabel.numberOfLines = 0
+        nameLabel.preferredMaxLayoutWidth = 350
+        nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+       
         
-        brandLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor).isActive = true
-        brandLabel.topAnchor.constraint(equalTo: imageView.centerYAnchor, constant: -10).isActive = true
+        
+        brandLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        brandLabel.topAnchor.constraint(equalTo: view.centerYAnchor, constant: 50).isActive = true
                 
-        costLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        costLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        costLabel.topAnchor.constraint(equalTo: view.centerYAnchor,constant: 80).isActive = true
+        costLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         
     }
     
     func fillData(withModel: Goods) {
         brandLabel.text = "Бренд: " + String(withModel.results.first!.brand)
-        costLabel.text = "Цена: " + String(withModel.results.first!.cost)
+        costLabel.text = "Цена: " + String(withModel.results.first!.cost) + " руб."
+        nameLabel.text = String(withModel.results.first!.name)
         imageView.downloaded(from: withModel.results.first!.img)
     }
     
