@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Api } from "../components/api/pharmacyApi.ts";
 
+const api = new Api();
+
+const csrf = async () =>{
+    const res = await api.accounts.accountsCsrfCookieList()
+        .then((response) => {
+            return console.log(response.status)
+        }).catch((err)=>{
+
+        })
+    return res
+}
 const CSRFToken = () => {
     const [csrftoken, setcsrftoken] = useState('');
 
@@ -22,7 +33,7 @@ const CSRFToken = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await axios.get(`http://127.0.0.1:8000/accounts/csrf_cookie`);
+                await csrf()
             } catch (err) {
 
             }
