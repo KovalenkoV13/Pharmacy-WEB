@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth import models as user_models
 from django.contrib.auth.models import PermissionsMixin
 
 
@@ -41,7 +40,7 @@ class Ordergood(models.Model):
 class Orders(models.Model):
     sum = models.IntegerField(blank=True, null=True)
     addres = models.CharField(max_length=100, blank=True, null=True)
-    users = models.ForeignKey('Users', models.DO_NOTHING, db_column='users', blank=True, null=True)
+    users = models.IntegerField(blank=True, null=True)
     time_create = models.DateField(blank=True, null=True)
     time_update = models.DateField(blank=True, null=True)
 
@@ -49,28 +48,6 @@ class Orders(models.Model):
         managed = False
         db_table = 'orders'
 
-
-class Users(models.Model):
-    username = models.CharField(max_length=40, blank=True, null=True)
-    password = models.CharField(max_length=40, blank=True, null=True)
-    name = models.CharField(max_length=40, blank=True, null=True)
-    lastname = models.CharField(max_length=60, blank=True, null=True)
-    number = models.CharField(max_length=11, blank=True, null=True)
-    email = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'users'
-
-# class Users(user_models.AbstractBaseUser, PermissionsMixin):
-#     username = models.CharField(max_length=40, unique=True)
-#     password = models.CharField(max_length=40, blank=True, null=True)
-#     name = models.CharField(max_length=40, blank=True, null=True)
-#     lastname = models.CharField(max_length=60, blank=True, null=True)
-#     number = models.CharField(max_length=11, blank=True, null=True)
-#     email = models.CharField(max_length=50, blank=True, null=True)
-#
-#     USERNAME_FIELD = 'username'
 
 
 class Cart(models.Model):

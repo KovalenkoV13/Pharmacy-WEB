@@ -75,27 +75,6 @@ class OrdersSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class UserSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=40)
-    password = serializers.CharField(max_length=40)
-    name = serializers.CharField(max_length=40)
-    lastname = serializers.CharField(max_length=60)
-    number = serializers.CharField(max_length=11)
-    email = serializers.CharField(max_length=50)
-
-    def create(self, validated_data):
-        return Users.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.login = validated_data.get("login", instance.login)
-        instance.password = validated_data.get("password", instance.password)
-        instance.name = validated_data.get("name", instance.name)
-        instance.lastname = validated_data.get("lastname", instance.lastname)
-        instance.number = validated_data.get("number", instance.number)
-        instance.email = validated_data.get("email", instance.email)
-        instance.save()
-        return instance
-
 class OrderGoodSerializer(serializers.Serializer):
     id_order = serializers.IntegerField()
     namegood = serializers.CharField()

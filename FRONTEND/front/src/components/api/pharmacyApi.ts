@@ -115,7 +115,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "http://127.0.0.1:8000/api";
+  public baseUrl: string = "http://127.0.0.1:8000";
   private securityData: SecurityDataType | null = null;
   private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
   private abortControllers = new Map<CancelToken, AbortController>();
@@ -282,19 +282,132 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title Pharmacy API
  * @version v1
- * @baseUrl http://127.0.0.1:8000/api
+ * @baseUrl http://127.0.0.1:8000
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  cart = {
+  accounts = {
     /**
      * No description
      *
-     * @tags cart
-     * @name CartList
-     * @request GET:/cart/
+     * @tags accounts
+     * @name AccountsAuthenticatedList
+     * @request GET:/accounts/authenticated
      * @secure
      */
-    cartList: (
+    accountsAuthenticatedList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/authenticated`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags accounts
+     * @name AccountsCsrfCookieList
+     * @request GET:/accounts/csrf_cookie
+     * @secure
+     */
+    accountsCsrfCookieList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/csrf_cookie`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags accounts
+     * @name AccountsDeleteDelete
+     * @request DELETE:/accounts/delete
+     * @secure
+     */
+    accountsDeleteDelete: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/delete`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags accounts
+     * @name AccountsGetUsersList
+     * @request GET:/accounts/get_users
+     * @secure
+     */
+    accountsGetUsersList: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/get_users`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags accounts
+     * @name AccountsLoginCreate
+     * @request POST:/accounts/login
+     * @secure
+     */
+    accountsLoginCreate: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/login`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags accounts
+     * @name AccountsLogoutCreate
+     * @request POST:/accounts/logout
+     * @secure
+     */
+    accountsLogoutCreate: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/logout`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags accounts
+     * @name AccountsRegisterCreate
+     * @request POST:/accounts/register
+     * @secure
+     */
+    accountsRegisterCreate: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/accounts/register`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+  };
+  api = {
+    /**
+     * No description
+     *
+     * @tags api
+     * @name ApiCartList
+     * @request GET:/api/cart/
+     * @secure
+     */
+    apiCartList: (
       query?: {
         /** A page number within the paginated result set. */
         page?: number;
@@ -312,7 +425,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         },
         any
       >({
-        path: `/cart/`,
+        path: `/api/cart/`,
         method: "GET",
         query: query,
         secure: true,
@@ -323,14 +436,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartCreate
-     * @request POST:/cart/
+     * @tags api
+     * @name ApiCartCreate
+     * @request POST:/api/cart/
      * @secure
      */
-    cartCreate: (data: Cart, params: RequestParams = {}) =>
+    apiCartCreate: (data: Cart, params: RequestParams = {}) =>
       this.request<Cart, any>({
-        path: `/cart/`,
+        path: `/api/cart/`,
         method: "POST",
         body: data,
         secure: true,
@@ -341,14 +454,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartUpdate
-     * @request PUT:/cart/
+     * @tags api
+     * @name ApiCartUpdate
+     * @request PUT:/api/cart/
      * @secure
      */
-    cartUpdate: (data: Cart, params: RequestParams = {}) =>
+    apiCartUpdate: (data: Cart, params: RequestParams = {}) =>
       this.request<Cart, any>({
-        path: `/cart/`,
+        path: `/api/cart/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -359,14 +472,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartDelete
-     * @request DELETE:/cart/
+     * @tags api
+     * @name ApiCartDelete
+     * @request DELETE:/api/cart/
      * @secure
      */
-    cartDelete: (params: RequestParams = {}) =>
+    apiCartDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/cart/`,
+        path: `/api/cart/`,
         method: "DELETE",
         secure: true,
         ...params,
@@ -375,12 +488,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartRead
-     * @request GET:/cart/{name}/
+     * @tags api
+     * @name ApiCartRead
+     * @request GET:/api/cart/{name}/
      * @secure
      */
-    cartRead: (
+    apiCartRead: (
       name: string,
       query?: {
         /** A page number within the paginated result set. */
@@ -399,7 +512,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         },
         any
       >({
-        path: `/cart/${name}/`,
+        path: `/api/cart/${name}/`,
         method: "GET",
         query: query,
         secure: true,
@@ -410,16 +523,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartCreate2
-     * @request POST:/cart/{name}/
-     * @originalName cartCreate
+     * @tags api
+     * @name ApiCartCreate2
+     * @request POST:/api/cart/{name}/
+     * @originalName apiCartCreate
      * @duplicate
      * @secure
      */
-    cartCreate2: (name: string, data: Cart, params: RequestParams = {}) =>
+    apiCartCreate2: (name: string, data: Cart, params: RequestParams = {}) =>
       this.request<Cart, any>({
-        path: `/cart/${name}/`,
+        path: `/api/cart/${name}/`,
         method: "POST",
         body: data,
         secure: true,
@@ -430,16 +543,16 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartUpdate2
-     * @request PUT:/cart/{name}/
-     * @originalName cartUpdate
+     * @tags api
+     * @name ApiCartUpdate2
+     * @request PUT:/api/cart/{name}/
+     * @originalName apiCartUpdate
      * @duplicate
      * @secure
      */
-    cartUpdate2: (name: string, data: Cart, params: RequestParams = {}) =>
+    apiCartUpdate2: (name: string, data: Cart, params: RequestParams = {}) =>
       this.request<Cart, any>({
-        path: `/cart/${name}/`,
+        path: `/api/cart/${name}/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -450,32 +563,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags cart
-     * @name CartDelete2
-     * @request DELETE:/cart/{name}/
-     * @originalName cartDelete
+     * @tags api
+     * @name ApiCartDelete2
+     * @request DELETE:/api/cart/{name}/
+     * @originalName apiCartDelete
      * @duplicate
      * @secure
      */
-    cartDelete2: (name: string, params: RequestParams = {}) =>
+    apiCartDelete2: (name: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/cart/${name}/`,
+        path: `/api/cart/${name}/`,
         method: "DELETE",
         secure: true,
         ...params,
       }),
-  };
-  category = {
+
     /**
      * @description Возвращает категории
      *
-     * @tags category
-     * @name CategoryList
+     * @tags api
+     * @name ApiCategoryList
      * @summary Список категорий
-     * @request GET:/category/
+     * @request GET:/api/category/
      * @secure
      */
-    categoryList: (
+    apiCategoryList: (
       query?: {
         /** A page number within the paginated result set. */
         page?: number;
@@ -493,7 +605,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         },
         any
       >({
-        path: `/category/`,
+        path: `/api/category/`,
         method: "GET",
         query: query,
         secure: true,
@@ -504,14 +616,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags category
-     * @name CategoryCreate
-     * @request POST:/category/
+     * @tags api
+     * @name ApiCategoryCreate
+     * @request POST:/api/category/
      * @secure
      */
-    categoryCreate: (data: Category, params: RequestParams = {}) =>
+    apiCategoryCreate: (data: Category, params: RequestParams = {}) =>
       this.request<Category, any>({
-        path: `/category/`,
+        path: `/api/category/`,
         method: "POST",
         body: data,
         secure: true,
@@ -522,14 +634,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags category
-     * @name CategoryUpdate
-     * @request PUT:/category/
+     * @tags api
+     * @name ApiCategoryUpdate
+     * @request PUT:/api/category/
      * @secure
      */
-    categoryUpdate: (data: Category, params: RequestParams = {}) =>
+    apiCategoryUpdate: (data: Category, params: RequestParams = {}) =>
       this.request<Category, any>({
-        path: `/category/`,
+        path: `/api/category/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -540,29 +652,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags category
-     * @name CategoryDelete
-     * @request DELETE:/category/
+     * @tags api
+     * @name ApiCategoryDelete
+     * @request DELETE:/api/category/
      * @secure
      */
-    categoryDelete: (params: RequestParams = {}) =>
+    apiCategoryDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/category/`,
+        path: `/api/category/`,
         method: "DELETE",
         secure: true,
         ...params,
       }),
-  };
-  good = {
+
     /**
      * No description
      *
-     * @tags good
-     * @name GoodList
-     * @request GET:/good/
+     * @tags api
+     * @name ApiGoodList
+     * @request GET:/api/good/
      * @secure
      */
-    goodList: (
+    apiGoodList: (
       query?: {
         name?: string;
         min_price?: number;
@@ -585,7 +696,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         },
         any
       >({
-        path: `/good/`,
+        path: `/api/good/`,
         method: "GET",
         query: query,
         secure: true,
@@ -596,14 +707,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags good
-     * @name GoodCreate
-     * @request POST:/good/
+     * @tags api
+     * @name ApiGoodCreate
+     * @request POST:/api/good/
      * @secure
      */
-    goodCreate: (data: Good, params: RequestParams = {}) =>
+    apiGoodCreate: (data: Good, params: RequestParams = {}) =>
       this.request<Good, any>({
-        path: `/good/`,
+        path: `/api/good/`,
         method: "POST",
         body: data,
         secure: true,
@@ -614,14 +725,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags good
-     * @name GoodUpdate
-     * @request PUT:/good/
+     * @tags api
+     * @name ApiGoodUpdate
+     * @request PUT:/api/good/
      * @secure
      */
-    goodUpdate: (data: Good, params: RequestParams = {}) =>
+    apiGoodUpdate: (data: Good, params: RequestParams = {}) =>
       this.request<Good, any>({
-        path: `/good/`,
+        path: `/api/good/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -632,29 +743,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags good
-     * @name GoodDelete
-     * @request DELETE:/good/
+     * @tags api
+     * @name ApiGoodDelete
+     * @request DELETE:/api/good/
      * @secure
      */
-    goodDelete: (params: RequestParams = {}) =>
+    apiGoodDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/good/`,
+        path: `/api/good/`,
         method: "DELETE",
         secure: true,
         ...params,
       }),
-  };
-  og = {
+
     /**
      * No description
      *
-     * @tags og
-     * @name OgList
-     * @request GET:/og/
+     * @tags api
+     * @name ApiOgList
+     * @request GET:/api/og/
      * @secure
      */
-    ogList: (
+    apiOgList: (
       query?: {
         /** A page number within the paginated result set. */
         page?: number;
@@ -662,7 +772,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
-        path: `/og/`,
+        path: `/api/og/`,
         method: "GET",
         query: query,
         secure: true,
@@ -672,14 +782,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags og
-     * @name OgCreate
-     * @request POST:/og/
+     * @tags api
+     * @name ApiOgCreate
+     * @request POST:/api/og/
      * @secure
      */
-    ogCreate: (params: RequestParams = {}) =>
+    apiOgCreate: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/og/`,
+        path: `/api/og/`,
         method: "POST",
         secure: true,
         ...params,
@@ -688,14 +798,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags og
-     * @name OgUpdate
-     * @request PUT:/og/
+     * @tags api
+     * @name ApiOgUpdate
+     * @request PUT:/api/og/
      * @secure
      */
-    ogUpdate: (params: RequestParams = {}) =>
+    apiOgUpdate: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/og/`,
+        path: `/api/og/`,
         method: "PUT",
         secure: true,
         ...params,
@@ -704,30 +814,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags og
-     * @name OgDelete
-     * @request DELETE:/og/
+     * @tags api
+     * @name ApiOgDelete
+     * @request DELETE:/api/og/
      * @secure
      */
-    ogDelete: (params: RequestParams = {}) =>
+    apiOgDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/og/`,
+        path: `/api/og/`,
         method: "DELETE",
         secure: true,
         ...params,
       }),
-  };
-  orders = {
+
     /**
      * @description Возвращает список всех заказов
      *
-     * @tags orders
-     * @name OrdersList
+     * @tags api
+     * @name ApiOrdersList
      * @summary Список всех заказов
-     * @request GET:/orders/
+     * @request GET:/api/orders/
      * @secure
      */
-    ordersList: (
+    apiOrdersList: (
       query?: {
         /** A page number within the paginated result set. */
         page?: number;
@@ -735,7 +844,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       params: RequestParams = {},
     ) =>
       this.request<void, any>({
-        path: `/orders/`,
+        path: `/api/orders/`,
         method: "GET",
         query: query,
         secure: true,
@@ -745,14 +854,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags orders
-     * @name OrdersCreate
-     * @request POST:/orders/
+     * @tags api
+     * @name ApiOrdersCreate
+     * @request POST:/api/orders/
      * @secure
      */
-    ordersCreate: (params: RequestParams = {}) =>
+    apiOrdersCreate: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/orders/`,
+        path: `/api/orders/`,
         method: "POST",
         secure: true,
         ...params,
@@ -761,14 +870,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags orders
-     * @name OrdersUpdate
-     * @request PUT:/orders/
+     * @tags api
+     * @name ApiOrdersUpdate
+     * @request PUT:/api/orders/
      * @secure
      */
-    ordersUpdate: (params: RequestParams = {}) =>
+    apiOrdersUpdate: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/orders/`,
+        path: `/api/orders/`,
         method: "PUT",
         secure: true,
         ...params,
@@ -777,70 +886,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags orders
-     * @name OrdersDelete
-     * @request DELETE:/orders/
+     * @tags api
+     * @name ApiOrdersDelete
+     * @request DELETE:/api/orders/
      * @secure
      */
-    ordersDelete: (params: RequestParams = {}) =>
+    apiOrdersDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/orders/`,
+        path: `/api/orders/`,
         method: "DELETE",
         secure: true,
         ...params,
       }),
   };
-  users = {
+  profile = {
     /**
      * No description
      *
-     * @tags users
-     * @name UsersList
-     * @request GET:/users/
+     * @tags profile
+     * @name ProfileUpdateUserUpdate
+     * @request PUT:/profile/update_user
      * @secure
      */
-    usersList: (
-      query?: {
-        /** A page number within the paginated result set. */
-        page?: number;
-      },
-      params: RequestParams = {},
-    ) =>
+    profileUpdateUserUpdate: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/users/`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags users
-     * @name UsersCreate
-     * @request POST:/users/
-     * @secure
-     */
-    usersCreate: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/users/`,
-        method: "POST",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags users
-     * @name UsersUpdate
-     * @request PUT:/users/
-     * @secure
-     */
-    usersUpdate: (params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/users/`,
+        path: `/profile/update_user`,
         method: "PUT",
         secure: true,
         ...params,
@@ -849,15 +919,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags users
-     * @name UsersDelete
-     * @request DELETE:/users/
+     * @tags profile
+     * @name ProfileUserList
+     * @request GET:/profile/user
      * @secure
      */
-    usersDelete: (params: RequestParams = {}) =>
+    profileUserList: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/users/`,
-        method: "DELETE",
+        path: `/profile/user`,
+        method: "GET",
         secure: true,
         ...params,
       }),

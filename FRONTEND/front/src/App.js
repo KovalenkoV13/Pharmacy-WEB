@@ -7,6 +7,8 @@ import NavBar from "./components/sidebar";
 import Catalog from "./pages/catalog"
 import {Context, Reducer, initialState} from "./components/reducer";
 import Shoplist from "./pages/shoplist";
+import Login from "./pages/login";
+import Register from "./pages/register";
 
 
 function App() {
@@ -55,6 +57,26 @@ function App() {
                       </Context.Provider>
                   }
 
+              >
+              </Route>
+
+              <Route
+                  path="/login/"
+                  element={
+                      <Context.Provider value={{dispatch, state}}>
+                          <Login />
+                      </Context.Provider>
+                  }
+
+              >
+              </Route>
+              <Route
+                  path="/register/"
+                  element={
+                      <Context.Provider value={{dispatch, state}}>
+                          <Register />
+                      </Context.Provider>
+                  }
               >
               </Route>
           </Routes>

@@ -9,7 +9,6 @@ from rest_framework import permissions
 router = routers.DefaultRouter()
 router.register(r'good', views.GoodViewSet)
 router.register(r'orders', views.OrdersViewSet)
-router.register(r'users', views.UsersViewSet)
 
 
 schema_view = get_schema_view(
@@ -34,8 +33,9 @@ urlpatterns = [
 
 
 
-    path('api/auth/', include('rest_framework.urls')),
-
+    path('api-auth/', include('rest_framework.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('profile/', include('user_profile.urls')),
 
 
     path('api/good/', views.GoodView.as_view()),
@@ -43,7 +43,10 @@ urlpatterns = [
     path('api/cart/<str:pk>/', views.CartView.as_view()),
     path('api/good/<str:pk>/', views.GoodViewOne),
     path('api/orders/', views.OrderView.as_view()),
-    path('api/users/', views.UserView.as_view()),
     path('api/category/', views.CategoryView.as_view()),
     path('api/og/', views.OGView.as_view()),
 ]
+
+
+
+

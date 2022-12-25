@@ -280,3 +280,73 @@ Card{
   padding-left: 270px;
 }
 
+/*login.js*/
+
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+  .Login form {
+    margin: 0 auto;
+    max-width: 500px;
+    border-style: solid;
+    border-radius: 5px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
+    background: white;
+  }
+  .username{
+    width: 300px;
+    margin-left: 100px;
+  }
+  .password{
+    width: 300px;
+    margin-left: 100px;
+  }
+  .LoginButton{
+    margin-top: 30px;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  .Login form h2{
+    color: darkred;
+    margin-top: 20px;
+  }
+}
+
+@media all and (min-width: 480px) {
+  .Register {
+    padding: 60px 0;
+  }
+
+  .Register form {
+    margin: 0 auto;
+    max-width: 500px;
+    border-style: solid;
+    border-radius: 5px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
+    background: white;
+  }
+  .username{
+    width: 300px;
+    margin-left: 100px;
+  }
+  .password{
+    width: 300px;
+    margin-left: 100px;
+  }
+  .LoginButton{
+    margin-top: 30px;
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  .repassword{
+    width: 300px;
+    margin-left: 100px;
+  }
+  .Register form h2{
+    color: darkred;
+    margin-top: 20px;
+  }
+}
+

@@ -7,12 +7,13 @@ import {
     menuClasses
 } from "react-pro-sidebar";
 import { FaList, FaRegHeart } from "react-icons/fa";
-import { FiHome, FiLogIn } from "react-icons/fi";
+import { FiHome, FiLogIn, FiLogOut } from "react-icons/fi";
 import { BiCog } from "react-icons/bi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import {Link} from "react-router-dom";
 import {Context} from "./reducer";
 import Avatar from '@mui/material/Avatar';
+
 
 
 const Header = (props) => {
@@ -116,7 +117,8 @@ const Header = (props) => {
                         </Menu>
                          <Menu iconShape="square">
                              {!state.isLogIn && <MenuItem
-                                onClick={() => dispatch({type: 'LOGIN' })}
+                                 routerLink={
+                                     <Link to={"/login"} />}
                                 icon={<FiLogIn color={'whitesmoke'} />}
                                 rootStyles={{
                                     ['.' + menuClasses.button]: {
@@ -126,11 +128,11 @@ const Header = (props) => {
                                     },
                                 }}
                             >
-                                LogIn
+                                Войти
                             </MenuItem>}
                              {state.isLogIn && <MenuItem
                                  onClick={() => dispatch({type: 'LOGOUT' })}
-                                 icon={<FiLogIn color={'whitesmoke'} />}
+                                 icon={<FiLogOut color={'whitesmoke'} />}
                                  rootStyles={{
                                      ['.' + menuClasses.button]: {
                                          '&:hover': {
@@ -139,7 +141,7 @@ const Header = (props) => {
                                      },
                                  }}
                              >
-                                 LogOut
+                                 Выйти
                              </MenuItem>}
                         </Menu>
                     </div>

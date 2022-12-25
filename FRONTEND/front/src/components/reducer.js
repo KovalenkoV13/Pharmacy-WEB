@@ -1,39 +1,81 @@
 import React, {createContext, useEffect, useReducer} from "react";
 
-export const Context = createContext();
+export const defaultState = {
+    isAuthenticated: false
+}
+export const Context = createContext(defaultState);
 export const initialState = {
     product: [],
     isLogIn: false,
     order: []
 };
 
+export const
+    REGISTER_SUCCESS = "REGISTER_SUCCESS",
+    REGISTER_FAIL = "REGISTER_FAIL",
+    LOGIN_SUCCESS = "LOGIN_SUCCESS",
+    LOGIN_FAIL = "LOGIN_FAIL",
+    LOGOUT_SUCCESS = "LOGOUT_SUCCESS",
+    LOGOUT_FAIL = "LOGOUT_FAIL",
+    AUTHENTICATED_SUCCESS = "AUTHENTICATED_SUCCESS",
+    AUTHENTICATED_FAIL = "AUTHENTICATED_FAIL"
+
 export const Reducer = (state, action) => {
-    switch (action.type){
-        case 'PRODUCT':
+    const { type, payload } = action
+    switch (type){
+        // case 'PRODUCT':
+        //     return {
+        //         product: [...action.payload,...state.product],
+        //         isLogIn: state.isLogIn,
+        //     };
+        // case 'DELETE_PRODUCT':
+        //     return {
+        //         product: state.product.filter(item => item.name !== action.payload),
+        //         isLogIn: state.isLogIn,
+        //     };
+        // case 'LOGIN':
+        //     return {
+        //         isLogIn: true,
+        //         product: state.product,
+        //     };
+        // case 'LOGOUT':
+        //     return {
+        //         isLogIn: false,
+        //         product: []
+        //     };
+        // case 'ORDER':
+        //     return {
+        //         isLogIn: false,
+        //         product: []
+        //     };
+        case LOGOUT_SUCCESS:
             return {
-                product: [...action.payload,...state.product],
-                isLogIn: state.isLogIn,
-            };
-        case 'DELETE_PRODUCT':
+                ...state,
+                isAuthenticated: false
+            }
+        case AUTHENTICATED_FAIL:
             return {
-                product: state.product.filter(item => item.name !== action.payload),
-                isLogIn: state.isLogIn,
-            };
-        case 'LOGIN':
+                ...state,
+                isAuthenticated: false
+            }
+        case AUTHENTICATED_SUCCESS:
             return {
-                isLogIn: true,
-                product: state.product,
-            };
-        case 'LOGOUT':
+                ...state,
+                isAuthenticated: true
+            }
+        case REGISTER_SUCCESS:
+            console.log("REGISTER_SUCCESS")
             return {
-                isLogIn: false,
-                product: []
-            };
-        case 'ORDER':
+                ...state,
+                isAuthenticated: false
+            }
+        case LOGIN_SUCCESS:
+            console.log("LOGIN_SUCCESS ID", payload)
             return {
-                isLogIn: false,
-                product: []
-            };
+                ...state,
+                id: payload,
+                isAuthenticated: true
+            }
     };
 };
 

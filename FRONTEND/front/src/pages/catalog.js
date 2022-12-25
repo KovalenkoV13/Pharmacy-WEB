@@ -9,7 +9,7 @@ import {Context} from "../components/reducer";
 const api = new Api();
 
 const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =>{
-    const res = await api.good.goodList({
+    const res = await api.api.apiGoodList({
         name: `${name2}`,
         min_price: `${min}`,
         max_price: `${max}`,
@@ -27,7 +27,7 @@ const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =
 
 
 const createCart = async (name, cost, img) =>{
-    const res = await api.cart.cartCreate(
+    const res = await api.api.apiCartCreate(
         {
             name: `${name}`,
             cost: `${cost}`,

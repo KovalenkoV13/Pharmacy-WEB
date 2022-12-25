@@ -8,7 +8,7 @@ import { Api } from "../components/api/pharmacyApi.ts";
 const api = new Api();
 
 const deleteCart = async (name) =>{
-    const res = await api.cart.cartDelete2(
+    const res = await api.api.apiCartDelete2(
             `${name}`,
     {headers: {'content-type': 'application/json'}
         })
@@ -22,7 +22,7 @@ const deleteCart = async (name) =>{
 
 
 const getCart = async () =>{
-    const res = await api.cart.cartList()
+    const res = await api.api.apiCartList()
         .then((response) => {
             return response.data;
         }).catch(()=>{
