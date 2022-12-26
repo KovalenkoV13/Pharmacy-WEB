@@ -22,6 +22,11 @@ export interface Cart {
    * @minLength 1
    */
   img: string;
+  /**
+   * User profile userprofile
+   * @minLength 1
+   */
+  user_profile_userprofile: string;
 }
 
 export interface Category {
@@ -409,6 +414,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     apiCartList: (
       query?: {
+        /** A search term. */
+        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },
@@ -490,12 +497,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags api
      * @name ApiCartRead
-     * @request GET:/api/cart/{name}/
+     * @request GET:/api/cart/{id}/
      * @secure
      */
     apiCartRead: (
-      name: string,
+      id: number,
       query?: {
+        /** A search term. */
+        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },
@@ -512,7 +521,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         },
         any
       >({
-        path: `/api/cart/${name}/`,
+        path: `/api/cart/${id}/`,
         method: "GET",
         query: query,
         secure: true,
@@ -525,14 +534,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags api
      * @name ApiCartCreate2
-     * @request POST:/api/cart/{name}/
+     * @request POST:/api/cart/{id}/
      * @originalName apiCartCreate
      * @duplicate
      * @secure
      */
-    apiCartCreate2: (name: string, data: Cart, params: RequestParams = {}) =>
+    apiCartCreate2: (id: number, data: Cart, params: RequestParams = {}) =>
       this.request<Cart, any>({
-        path: `/api/cart/${name}/`,
+        path: `/api/cart/${id}/`,
         method: "POST",
         body: data,
         secure: true,
@@ -545,14 +554,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags api
      * @name ApiCartUpdate2
-     * @request PUT:/api/cart/{name}/
+     * @request PUT:/api/cart/{id}/
      * @originalName apiCartUpdate
      * @duplicate
      * @secure
      */
-    apiCartUpdate2: (name: string, data: Cart, params: RequestParams = {}) =>
+    apiCartUpdate2: (id: number, data: Cart, params: RequestParams = {}) =>
       this.request<Cart, any>({
-        path: `/api/cart/${name}/`,
+        path: `/api/cart/${id}/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -565,14 +574,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags api
      * @name ApiCartDelete2
-     * @request DELETE:/api/cart/{name}/
+     * @request DELETE:/api/cart/{id}/
      * @originalName apiCartDelete
      * @duplicate
      * @secure
      */
-    apiCartDelete2: (name: string, params: RequestParams = {}) =>
+    apiCartDelete2: (id: number, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/cart/${name}/`,
+        path: `/api/cart/${id}/`,
         method: "DELETE",
         secure: true,
         ...params,

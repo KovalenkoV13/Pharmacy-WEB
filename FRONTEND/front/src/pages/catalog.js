@@ -6,6 +6,8 @@ import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { Api } from "../components/api/pharmacyApi.ts";
 import {Context} from "../components/reducer";
+import Cookies from "js-cookie";
+import axios from "axios";
 const api = new Api();
 
 const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =>{
@@ -26,14 +28,21 @@ const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =
 
 
 
-const createCart = async (name, cost, img) =>{
+const createCart = async (name, cost, img, user) =>{
     const res = await api.api.apiCartCreate(
         {
             name: `${name}`,
             cost: `${cost}`,
-            img: `${img}`
+            img: `${img}`,
+            user_profile_userprofile: `${user}`
         },
-        {headers:{'content-type': 'application/json'}}
+        {
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': Cookies.get('csrftoken')
+            }}
     )
         .then((response) => {
             return response.data;
@@ -53,11 +62,11 @@ function Catalog(props) {
     const [max, setMax] = useState(20000);
     const [loading, setLoading] = useState(false);
     const [good, setGood] = useState([]);
-    // const [add, setAdd] = useState("error")
     const [open, setOpen] = useState(false);
+    const [openAut, setOpenAut] = useState(false);
 
 
-
+    console.log(state)
 
     // поиск товара
     const handleSearch = async () =>{
@@ -72,6 +81,13 @@ function Catalog(props) {
     }
     const handleClose = async () =>{
         setOpen(false);
+    }
+
+    const handleAddAut = async () =>{
+        setOpenAut(true);
+    }
+    const handleCloseAut = async () =>{
+        setOpenAut(false);
     }
 
 
@@ -114,6 +130,13 @@ function Catalog(props) {
                                 onClose={handleClose}
                                 message="Товар добавлен в корзину!"
                             />
+                            <Snackbar
+                                open={openAut}
+                                anchorOrigin={ {vertical: 'bottom', horizontal: 'right'} }
+                                autoHideDuration={3000}
+                                onClose={handleCloseAut}
+                                message="Авторизируйтесь, чтобы добавить товар в корзину"
+                            />
                             <Card key={data.name}>
                                 <div key={data.img} className="c_img">
                                     <Card.Img className="cardImage" variant="top" src={data.img}/>
@@ -136,12 +159,16 @@ function Catalog(props) {
                                     </div>
                                     <div  className="actionP">
                                         <CardActions disableSpacing>
-                                            {state.isLogIn && <IconButton aria-label="add to favorites" color="error">
-                                                <FavoriteTwoToneIcon/>
-                                            </IconButton>}
-                                            {state.isLogIn && <IconButton
+                                            {state.isAuthenticated && <IconButton
                                                 aria-label="add to shoplist"
-                                                onClick={() => {createCart(data.name,data.cost,data.img); handleAdd()}}
+                                                onClick={() => {createCart(data.name,data.cost,data.img,state.id); handleAdd()}}
+                                                color="error"
+                                            >
+                                                <AddShoppingCartOutlinedIcon/>
+                                            </IconButton>}
+                                            {!state.isAuthenticated && <IconButton
+                                                aria-label="add to shoplist"
+                                                onClick={() => {handleAddAut()}}
                                                 color="error"
                                             >
                                                 <AddShoppingCartOutlinedIcon/>

@@ -4,11 +4,6 @@ export const defaultState = {
     isAuthenticated: false
 }
 export const Context = createContext(defaultState);
-export const initialState = {
-    product: [],
-    isLogIn: false,
-    order: []
-};
 
 export const
     REGISTER_SUCCESS = "REGISTER_SUCCESS",
@@ -23,31 +18,6 @@ export const
 export const Reducer = (state, action) => {
     const { type, payload } = action
     switch (type){
-        // case 'PRODUCT':
-        //     return {
-        //         product: [...action.payload,...state.product],
-        //         isLogIn: state.isLogIn,
-        //     };
-        // case 'DELETE_PRODUCT':
-        //     return {
-        //         product: state.product.filter(item => item.name !== action.payload),
-        //         isLogIn: state.isLogIn,
-        //     };
-        // case 'LOGIN':
-        //     return {
-        //         isLogIn: true,
-        //         product: state.product,
-        //     };
-        // case 'LOGOUT':
-        //     return {
-        //         isLogIn: false,
-        //         product: []
-        //     };
-        // case 'ORDER':
-        //     return {
-        //         isLogIn: false,
-        //         product: []
-        //     };
         case LOGOUT_SUCCESS:
             return {
                 ...state,
@@ -75,6 +45,11 @@ export const Reducer = (state, action) => {
                 ...state,
                 id: payload,
                 isAuthenticated: true
+            }
+        case LOGIN_FAIL:
+            console.log("LOGIN_SUCCESS ID", payload)
+            return {
+                isAuthenticated: false
             }
     };
 };

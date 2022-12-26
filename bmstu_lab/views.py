@@ -4,6 +4,7 @@ import django_filters.rest_framework
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list import ListView
 from django.http import  JsonResponse
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets, permissions
 from bmstu_lab.serializers import *
@@ -15,6 +16,7 @@ from django_filters import FilterSet, rest_framework
 from django_filters import NumberFilter
 from django.http import HttpResponse
 from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 
@@ -37,10 +39,22 @@ def GetMain(request):
 #API
 
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return bool(request.user and request.user.is_staff)
+
+
+
+
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    search_fields = ["id_cat"]
+    permission_classes = (IsAdminOrReadOnly,)
 
     @swagger_auto_schema(
         operation_summary="Список категорий",
@@ -106,7 +120,7 @@ class GoodView(generics.ListCreateAPIView):
     filter_backends = (rest_framework.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = GoodFilter
     search_fields = ["name"]
-    permission_classes=(permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny,)
 
 
 
@@ -200,21 +214,29 @@ class OrderView(generics.ListAPIView):
         instance.delete()
         return Response({"del": "delete post " + str(pk)})
 
+class UserFilter(FilterSet):
+    class Meta:
+        model = Cart
+        fields = ['user_profile_userprofile']
 
-class CartView(generics.ListAPIView):
+class CartView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    def get(self, request, *args, **kwargs):
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user_profile_userprofile']
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
         cart = Cart.objects.all()
-        serializer = CartSerializer(cart, many=True)
-        return Response({"cart": serializer.data})
+        return cart
 
     def post(self, request):
         post_new = Cart.objects.create(
             name=request.data["name"],
             cost=request.data["cost"],
-            img=request.data["img"])
-        return Response({'order': model_to_dict(post_new)})
+            img=request.data["img"],
+            user_profile_userprofile=request.data["user_profile_userprofile"]),
+        return Response({'success': 'good in cart'})
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk", None)
@@ -307,7 +329,7 @@ def GoodViewOne(request, pk):
         return HttpResponse(status=204)
 
 
-@csrf_exempt
+
 def CartViewOne(request, pk):
 
     try:

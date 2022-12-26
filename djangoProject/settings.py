@@ -53,7 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'django.middleware.common.CommonMiddleware'
+
 ]
 
 ROOT_URLCONF = 'djangoProject.urls'
@@ -136,9 +137,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
@@ -147,16 +145,23 @@ SWAGGER_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
+    'http://127.0.0.1:3000',
+    'http://172.20.10.2:8000'
 
 ]
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000/register', 'http://localhost:3000/login', 'http://localhost:3000', 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000/register', 'http://127.0.0.1:3000/login', 'http://127.0.0.1:3000/','http://127.0.0.1', 'http://127.0.0.1:3000', 'http://127.0.0.1:8000', 'http://172.20.10.2:8000/']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    'http://localhost:3000'
+    'http://127.0.0.1:3000'
+    'http://127.0.0.1',
+    'http://172.20.10.2:8000'
 ]
 
+
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+ALLOWED_HOSTS = ['172.20.10.2', '127.0.0.1']

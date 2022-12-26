@@ -1,52 +1,56 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Api } from "../components/api/pharmacyApi.ts";
+import CSRFToken from "../components/CSRFToken";
+import {Context} from "../components/reducer";
+import {register} from "../components/auth";
+import {Navigate} from "react-router-dom";
 
-const api = new Api();
-
-const register = async (username, password) =>{
-    const res = await api.accounts.accountsLoginCreate(
-        {headers: {
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-                'X-CSRFToken': document.cookie.match(/csrftoken=([w-]+)/)
-
-            },
-            body: JSON.stringify({username, password})
-        }
-    )
-        .then((response) => {
-            return console.log(response)
-        }).catch(()=>{
-            return {count:0, results:[]}
-        })
-    return res
-}
 
 export default function Register (){
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { state, dispatch } = useContext(Context)
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+        re_password: ''
+    });
+
+    const [accountCreated, setAccountCreated] = useState(false);
+
+    const { username, password, re_password } = formData;
 
     function validateForm() {
-        return email.length > 0 && password.length > 0;
+        return formData.username.length > 0 && formData.password.length > 5 && formData.re_password.length > 5;
     }
 
-    function handleSubmit(event) {
-        event.preventDefault();
-    }
+    const onSubmit = e => {
+        e.preventDefault();
+
+        if (password === re_password) {
+            console.log(username, password, re_password)
+            register(username, password, re_password).then(status => {
+                dispatch({ type: status, payload: {} })
+            })
+            setAccountCreated(true);
+    };}
+
+    if (state.isAuthenticated)
+        return <Navigate to='/'/>;
+    else if (accountCreated)
+        return <Navigate to='/login'/>;
 
     return (
         <div className="Register">
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={event => onSubmit(event)}>
+                <CSRFToken />
                 <h2>Регистрация</h2>
                 <Form.Group className={"username"} controlId="username">
                     <Form.Label>Имя пользователя</Form.Label>
                     <Form.Control
                         autoFocus
                         type="text"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={username}
+                        onChange={(e) => setFormData({ ...formData, username : e.target.value })}
                     />
                 </Form.Group>
                 <Form.Group className={"password"} controlId="password">
@@ -54,15 +58,15 @@ export default function Register (){
                     <Form.Control
                         type="password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => setFormData({ ...formData, password : e.target.value })}
                     />
                 </Form.Group>
                 <Form.Group className={"repassword"} controlId="repassword">
                     <Form.Label>Повторите пароль</Form.Label>
                     <Form.Control
                         type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={re_password}
+                        onChange={(e) => setFormData({ ...formData, re_password : e.target.value })}
                     />
                 </Form.Group>
                 <Button className={'LoginButton'} block="true" variant={"dark"} size="lg" type="submit" disabled={!validateForm()}>

@@ -1,18 +1,23 @@
-import React, {useReducer} from "react";
+import React, {useEffect, useReducer} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Main from "./pages/main";
 import "./App.css"
 import Product from "./pages/product";
 import NavBar from "./components/sidebar";
 import Catalog from "./pages/catalog"
-import {Context, Reducer, initialState} from "./components/reducer";
+import {Context, Reducer, defaultState} from "./components/reducer";
 import Shoplist from "./pages/shoplist";
 import Login from "./pages/login";
 import Register from "./pages/register";
+import {checkAuthenticated} from "./components/auth";
 
 
 function App() {
-    const [state, dispatch] = useReducer(Reducer,initialState)
+    const [state, dispatch] = useReducer(Reducer,defaultState)
+    // useEffect(() => {
+    //     checkAuthenticated();
+    //     load_user();
+    // }, []);
   return (
       <div className="App">
 
@@ -71,7 +76,7 @@ function App() {
               >
               </Route>
               <Route
-                  path="/register/"
+                  path="/registration"
                   element={
                       <Context.Provider value={{dispatch, state}}>
                           <Register />

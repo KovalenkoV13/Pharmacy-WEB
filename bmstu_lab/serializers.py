@@ -21,17 +21,22 @@ class CategorySerializer(serializers.Serializer):
 
 
 class CartSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     name = serializers.CharField()
-    cost = serializers.IntegerField()
+    cost = serializers.FloatField()
     img = serializers.CharField()
+    user_profile_userprofile = serializers.CharField()
+
 
     def create(self, validated_data):
         return Cart.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        instance.id = validated_data.get("id", instance.id)
         instance.name = validated_data.get("name", instance.name)
         instance.cost = validated_data.get("cost", instance.cost)
         instance.img = validated_data.get("img", instance.img)
+        instance.user_profile_userprofile = validated_data.get("user_profile_userprofile", instance.user_profile_userprofile)
         instance.save()
         return instance
 

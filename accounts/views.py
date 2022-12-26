@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 class SignupView(APIView):
     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
+    def post(self, request):
         data = self.request.data
 
         username = data['username']

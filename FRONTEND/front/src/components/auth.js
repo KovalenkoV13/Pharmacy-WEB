@@ -10,10 +10,15 @@ import {
     AUTHENTICATED_FAIL
 } from './reducer';
 import axios from "axios";
+import { Api } from "../components/api/pharmacyApi.ts";
+import {useState} from "react";
+
+const api = new Api();
+
 
 export const checkAuthenticated = async () => {
     const config = {
-        withCredentials: true,
+        credentials: 'include',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -39,6 +44,7 @@ export const checkAuthenticated = async () => {
 
 export const login = async (username, password) => {
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -49,12 +55,12 @@ export const login = async (username, password) => {
     const body = JSON.stringify({ username, password });
 
     try {
-        const res = await axios.post(`http://127.0.0.1:8000/accounts/login`, body, config);
+        const res = await axios.post('http://127.0.0.1:8000/accounts/login', body, config)
 
         if (res.data.success) {
-            return {type: LOGIN_SUCCESS, payload: res.data.userProfileId}
+            return {type: LOGIN_SUCCESS, payload: username}
         } else {
-            return LOGIN_FAIL
+            return {type: LOGIN_FAIL}
         }
     } catch(err) {
         return LOGIN_FAIL
@@ -63,6 +69,7 @@ export const login = async (username, password) => {
 
 export const register = async(username, password, re_password) => {
     const config = {
+        withCredentials: true,
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -72,9 +79,8 @@ export const register = async(username, password, re_password) => {
 
     const body = JSON.stringify({ username, password, re_password });
 
-    console.log("Body", body)
     try {
-        const res = await axios.post(`http://127.0.0.1:8000/accounts/register`, body, config);
+        const res = await axios.post('http://127.0.0.1:8000/accounts/register', body, config)
         if (res.data.error) {
             console.log("REGISTER_FAIL")
             return REGISTER_FAIL
@@ -90,7 +96,7 @@ export const register = async(username, password, re_password) => {
 
 export const logout = async ()  => {
     const config = {
-        withCredentials: true,
+        credentials: 'include',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

@@ -8,11 +8,11 @@ import {
 } from "react-pro-sidebar";
 import { FaList, FaRegHeart } from "react-icons/fa";
 import { FiHome, FiLogIn, FiLogOut } from "react-icons/fi";
-import { BiCog } from "react-icons/bi";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import {Link} from "react-router-dom";
 import {Context} from "./reducer";
 import Avatar from '@mui/material/Avatar';
+import {logout} from "./auth";
 
 
 
@@ -23,7 +23,6 @@ const Header = (props) => {
     const Collapse = (collapsed) => {
         collapsed ? collapseSidebar(false) : collapseSidebar(true);
     };
-
 
     return (
         <>
@@ -38,10 +37,10 @@ const Header = (props) => {
                             <p>{collapsed ? "Аптека" : "Аптека"}</p>
                         </div>
 
-                        {state.isLogIn &&
+                        {state.isAuthenticated &&
                             <div className={"Avatar"}>
-                                <Avatar>П</Avatar>
-                                <p>{collapsed ? undefined : "Пользователь"}</p>
+                                <Avatar>{state.id[0]}</Avatar>
+                                <p>{collapsed ? undefined : state.id}</p>
                             </div>
                         }
 
@@ -99,7 +98,7 @@ const Header = (props) => {
                                 Избранные
                             </MenuItem>
 
-                            {state.isLogIn && <MenuItem
+                            {state.isAuthenticated && <MenuItem
                                 routerLink={
                                     <Link to={"/shoplist"} />}
                                 icon={<AiOutlineShoppingCart color={'whitesmoke'} />}
@@ -116,7 +115,7 @@ const Header = (props) => {
                             }
                         </Menu>
                          <Menu iconShape="square">
-                             {!state.isLogIn && <MenuItem
+                             {!state.isAuthenticated && <MenuItem
                                  routerLink={
                                      <Link to={"/login"} />}
                                 icon={<FiLogIn color={'whitesmoke'} />}
@@ -130,8 +129,10 @@ const Header = (props) => {
                             >
                                 Войти
                             </MenuItem>}
-                             {state.isLogIn && <MenuItem
-                                 onClick={() => dispatch({type: 'LOGOUT' })}
+                             {state.isAuthenticated && <MenuItem
+                                 routerLink={
+                                     <Link to={"/login/"} />}
+                                 onClick={() => {logout().then(status => {dispatch({type: status, payload: {}})})}}
                                  icon={<FiLogOut color={'whitesmoke'} />}
                                  rootStyles={{
                                      ['.' + menuClasses.button]: {

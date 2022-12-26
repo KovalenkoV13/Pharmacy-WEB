@@ -7,7 +7,7 @@ function Main (props){
     return(
 
         <div>
-            <CSRFToken />
+
 
             <h1>Это наша стартовая страница</h1>
 

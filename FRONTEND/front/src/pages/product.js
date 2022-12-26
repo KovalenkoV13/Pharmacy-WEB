@@ -5,9 +5,11 @@ import { Api } from "../components/api/pharmacyApi.ts";
 
 const api = new Api();
 const getGoods = async (name ='' ) =>{
-    const res = await api.good.goodList({
+    const res = await api.api.apiGoodList({
         name: `${name}`
-    })
+    },
+
+        )
         .then((response) => {
             return response.data;
         }).catch(()=>{

@@ -11,7 +11,7 @@ const api = new Api();
 
 const deleteCart = async (name) =>{
     const res = await api.api.apiCartDelete2(
-            `${name}`,
+        `${name}`,
         {
             credentials: 'include',
             headers: {
@@ -31,7 +31,7 @@ const deleteCart = async (name) =>{
 
 const getCart = async (user = '') =>{
     const res = await api.api.apiCartList({
-        search: `${user}`},
+            search: `${user}`},
         {
             credentials: 'include',
             headers: {
@@ -81,7 +81,7 @@ const Shoplist = (props) => {
         <div className={"containerShoplist"}>
             <div className="BR">
                 <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-                     / Корзина</p>
+                    / Корзина</p>
             </div>
             <div  className={"Suma"}>
                 <h4>Детали заказа</h4>
@@ -96,7 +96,7 @@ const Shoplist = (props) => {
                     <p>{cart.length} товаров </p>}
                 {cart.map((data1) => {
                     return(
-                    <p>{data1.name}</p>
+                        <p>{data1.name}</p>
                     )
                 })
                 }
@@ -124,8 +124,8 @@ const Shoplist = (props) => {
                                 <img className="cardImageProduct" variant="top" src={data.img} alt={data.name}/>
                             </div>
                             <div className={"descriptionShoplist"}>
-                            <h5>{data.name}</h5>
-                            <p>Цена: {data.cost} руб.</p>
+                                <h5>{data.name}</h5>
+                                <p>Цена: {data.cost} руб.</p>
                             </div>
                             <IconButton
                                 aria-label="add to favorites"

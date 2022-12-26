@@ -51,13 +51,16 @@ class Orders(models.Model):
 
 
 class Cart(models.Model):
-    name = models.CharField(primary_key=True, max_length=100)
-    cost = models.BigIntegerField(blank=True, null=True)
-    img = models.CharField(max_length=200, blank=True, null=True)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    cost = models.FloatField(blank=True, null=True)
+    img = models.CharField(max_length=255, blank=True, null=True)
+    user_profile_userprofile = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'cart'
+
 
 
 
