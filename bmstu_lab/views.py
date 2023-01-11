@@ -3,7 +3,7 @@ from django.shortcuts import render
 import django_filters.rest_framework
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.list import ListView
-from django.http import  JsonResponse
+from django.http import JsonResponse, HttpRequest
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets, permissions
@@ -17,6 +17,11 @@ from django_filters import NumberFilter
 from django.http import HttpResponse
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required, permission_required
+
+from django.conf import settings
+import redis
+
+session_storage = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
 
 
@@ -39,22 +44,13 @@ def GetMain(request):
 #API
 
 
-class IsAdminOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return bool(request.user and request.user.is_staff)
-
-
-
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     search_fields = ["id_cat"]
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (permissions.AllowAny,)
 
     @swagger_auto_schema(
         operation_summary="Список категорий",
@@ -120,7 +116,6 @@ class GoodView(generics.ListCreateAPIView):
     filter_backends = (rest_framework.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = GoodFilter
     search_fields = ["name"]
-    permission_classes = (permissions.AllowAny,)
 
 
 
@@ -134,109 +129,159 @@ class GoodView(generics.ListCreateAPIView):
         return good
 
     def post(self, request):
-        post_new = Good.objects.create(
-            name=request.data["name"],
-            brand=request.data["brand"],
-            cost=request.data["cost"],
-            img=request.data["img"],
-            id_cat=request.data["id_cat"],
-            vest=request.data["vest"],
-        )
-        return Response({'good': model_to_dict(post_new)})
+        try:
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                post_new = Good.objects.create(
+                    name=request.data["name"],
+                    brand=request.data["brand"],
+                    cost=request.data["cost"],
+                    img=request.data["img"],
+                    id_cat=request.data["id_cat"],
+                    vest=request.data["vest"],
+                )
+                return Response({'good': model_to_dict(post_new)})
+        except:
+            return Response({'error': 'user is not authenticated and is not manager'})
+
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Good.objects.get(pk=pk)
-        except:
-            return Response({"error": "Object does not exists"})
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                pk = kwargs.get("pk", None)
+                if not pk:
+                    return Response({"error": "Method PUT not allowed"})
 
-        serializer = GoodSerializer(instance=instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"put": serializer.data})
+                try:
+                    instance = Good.objects.get(pk=pk)
+                except:
+                    return Response({"error": "Object does not exists"})
+
+                serializer = GoodSerializer(instance=instance, data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response({"put": serializer.data})
+        except:
+            return Response({'error': 'user is not authenticated and is not manager'})
+
 
     def delete(self, request, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method DELETE not allowed"})
         try:
-            instance = Good.objects.get(pk=pk)
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                pk = kwargs.get("pk", None)
+                if not pk:
+                    return Response({"error": "Method DELETE not allowed"})
+                try:
+                    instance = Good.objects.get(pk=pk)
+                except:
+                    return Response({"error": "Object does not exists"})
+                instance.delete()
+                return Response({"del": "delete post " + str(pk)})
         except:
-            return Response({"error": "Object does not exists"})
-        instance.delete()
-        return Response({"del": "delete post " + str(pk)})
+            return Response({'error': 'user is not authenticated and is not manager'})
+
 
 class OrderView(generics.ListAPIView):
+    queryset = Orders.objects.all()
+    serializer_class = OrdersSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['users']
 
     @swagger_auto_schema(
         operation_summary="Список всех заказов",
         operation_description="Возвращает список всех заказов",
     )
-    def get(self, request):
+    def get_queryset(self):
         order = Orders.objects.all()
-        serializer = OrdersSerializer(order, many=True)
-        return Response({"orders": serializer.data})
+        return order
 
     def post(self, request):
-        post_new = Orders.objects.create(
-            sum=request.data["sum"],
-            addres=request.data["addres"],
-            users=request.data["users"])
-        return Response({'order': model_to_dict(post_new)})
+        try:
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                post_new = Orders.objects.create(
+                    sum=request.data["sum"],
+                    addres=request.data["addres"],
+                    users=request.data["users"])
+                return Response({'order': model_to_dict(post_new)})
+        except:
+            return Response({'error': 'user is not authenticated'})
+
 
     def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
         try:
-            instance = Orders.objects.get(pk=pk)
-        except:
-            return Response({"error": "Object does not exists"})
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                pk = kwargs.get("pk", None)
+                if not pk:
+                    return Response({"error": "Method PUT not allowed"})
 
-        serializer = OrdersSerializer(instance=instance, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"put": serializer.data})
+                try:
+                    instance = Orders.objects.get(pk=pk)
+                except:
+                    return Response({"error": "Object does not exists"})
+
+                serializer = OrdersSerializer(instance=instance, data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response({"put": serializer.data})
+        except:
+            return Response({'error': 'user is not authenticated'})
 
     def delete(self, request, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method DELETE not allowed"})
         try:
-            instance = Orders.objects.get(pk=pk)
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                pk = kwargs.get("pk", None)
+                if not pk:
+                    return Response({"error": "Method DELETE not allowed"})
+                try:
+                    instance = Orders.objects.get(pk=pk)
+                except:
+                    return Response({"error": "Object does not exists"})
+                instance.delete()
+                return Response({"del": "delete post " + str(pk)})
         except:
-            return Response({"error": "Object does not exists"})
-        instance.delete()
-        return Response({"del": "delete post " + str(pk)})
+            return Response({'error': 'user is not authenticated'})
 
-class UserFilter(FilterSet):
-    class Meta:
-        model = Cart
-        fields = ['user_profile_userprofile']
+
+
 
 class CartView(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['user_profile_userprofile']
-    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        cart = Cart.objects.all()
-        return cart
+        try:
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                cart = Cart.objects.filter(user_profile_userprofile__exact=user)
+                return cart
+        except:
+            return []
 
     def post(self, request):
-        post_new = Cart.objects.create(
-            name=request.data["name"],
-            cost=request.data["cost"],
-            img=request.data["img"],
-            user_profile_userprofile=request.data["user_profile_userprofile"]),
-        return Response({'success': 'good in cart'})
+        try:
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            if user is not None:
+                post_new = Cart.objects.create(
+                    name=request.data["name"],
+                    cost=request.data["cost"],
+                    img=request.data["img"],
+                    user_profile_userprofile=request.data["user_profile_userprofile"]),
+                return Response({'success': 'good in cart'})
+        except:
+            return Response({'error': 'user is not authenticated'})
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk", None)
@@ -266,16 +311,18 @@ class CartView(generics.ListCreateAPIView):
 
 
 class OGView(generics.ListAPIView):
-    def get(self, request):
-        og = Ordergood.objects.all()
-        serializer = OrderGoodSerializer(og, many=True)
-        return Response({"OG": serializer.data})
+    queryset = Ordergood.objects.all()
+    serializer_class = OrderGoodSerializer
+
+    def get_queryset(self):
+        OG = Ordergood.objects.all()
+        return OG
 
     def post(self, request):
-        post_new = Ordergood.objects.create(
+        Ordergood.objects.create(
             id_order=request.data["id_order"],
             namegood=request.data["namegood"])
-        return Response({'OG': model_to_dict(post_new)})
+        return Response({'success': 'success'})
 
     def put(self, request, *args, **kwargs):
         pk = kwargs.get("pk", None)

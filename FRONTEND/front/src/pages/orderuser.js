@@ -9,35 +9,16 @@ import Cookies from "js-cookie";
 
 const api = new Api();
 
-const deleteCart = async (name) =>{
-    const res = await api.api.apiCartDelete2(
-        `${name}`,
-        {
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
-            }
-        })
-        .then((response) => {
-            return console.log(response.status)
-        }).catch(()=>{
-            return {count:0, results:[]}
-        })
-    return res
-}
 
 
-const getCart = async (user = '') =>{
-    const res = await api.api.apiCartList({
+const getOrder = async (user = '') =>{
+    const res = await api.api.apiOrdersList({
             search: `${user}`},
         {
             credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrftoken')
             }
         }
     )
@@ -49,7 +30,7 @@ const getCart = async (user = '') =>{
     return res
 }
 
-const Shoplist = (props) => {
+const Orderuser = (props) => {
     const {state, dispatch} = useContext(Context);
     const [adress, setAdr] = useState("2-я Бауманская ул., д.5, стр.1, Москва")
     const [open, setOpen] = useState(false);
@@ -57,15 +38,14 @@ const Shoplist = (props) => {
 
     useEffect( () => {
         async function fetchData() {
-            const {results} = await getCart(state.id);
+            const {results} = await getOrder(state.id);
             await setCart(results);
         }
         fetchData();
     },[])
 
     const handleReload = async (name) =>{
-        await deleteCart(name)
-        const {results} = await getCart(state.id);
+        const {results} = await getOrder(state.id);
         await setCart(results);
     }
 
@@ -81,9 +61,10 @@ const Shoplist = (props) => {
         <div className={"containerShoplist"}>
             <div className="BR">
                 <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-                    / Корзина</p>
+                    / Заказ</p>
             </div>
             <div  className={"Suma"}>
+                <h3>Заказ успешно оформлен</h3>
                 <h4>Детали заказа</h4>
                 {cart.length == "1" && <p>{cart.length} товар </p>}
                 {cart.length == "4" && <p>{cart.length} товара </p>}
@@ -102,12 +83,6 @@ const Shoplist = (props) => {
                 }
                 <p>Адрес доставки</p>
                 <input value={adress} onChange={(event => setAdr(event.target.value))}/>
-
-                <Button
-                    onClick={handleAdd}
-                    variant={"dark"}>
-                    Оформить закзаз
-                </Button>
             </div>
             <div className={"shoplistProduct"}>
                 {cart.map((data, index) => {
@@ -127,12 +102,6 @@ const Shoplist = (props) => {
                                 <h5>{data.name}</h5>
                                 <p>Цена: {data.cost} руб.</p>
                             </div>
-                            <IconButton
-                                aria-label="add to favorites"
-                                onClick={() => {handleReload(data.id)}}
-                            >
-                                <DeleteIcon/>
-                            </IconButton>
                         </div>
                     </Col>
                 })}
@@ -144,4 +113,4 @@ const Shoplist = (props) => {
 
 
 }
-export default Shoplist;
+export default Orderuser;

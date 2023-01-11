@@ -29,9 +29,8 @@ const deleteCart = async (name) =>{
 }
 
 
-const getCart = async (user = '') =>{
-    const res = await api.api.apiCartList({
-        search: `${user}`},
+const getCart = async () =>{
+    const res = await api.api.apiCartList({},
         {
             credentials: 'include',
             headers: {
@@ -72,6 +71,7 @@ const Shoplist = (props) => {
 
     const handleAdd = async () =>{
         setOpen(true);
+
     }
     const handleClose = async () =>{
         setOpen(false);
@@ -83,7 +83,7 @@ const Shoplist = (props) => {
                 <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
                      / Корзина</p>
             </div>
-            <div  className={"Suma"}>
+            <div className={"Suma"}>
                 <h4>Детали заказа</h4>
                 {cart.length == "1" && <p>{cart.length} товар </p>}
                 {cart.length == "4" && <p>{cart.length} товара </p>}
@@ -117,7 +117,8 @@ const Shoplist = (props) => {
                             anchorOrigin={ {vertical: 'bottom', horizontal: 'right'} }
                             autoHideDuration={3000}
                             onClose={handleClose}
-                            message="Заказ успешно оформлен!"
+                            message="Заказ успешно оформлен!
+                                    Просмотреть его можно в разделе 'Мои заказы' "
                         />
                         <div key={index} className={"shoplistProd"}>
                             <div className={"imgShoplist"}>

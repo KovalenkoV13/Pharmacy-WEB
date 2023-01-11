@@ -10,6 +10,8 @@
  */
 
 export interface Cart {
+  /** Id */
+  id: number;
   /**
    * Name
    * @minLength 1
@@ -72,6 +74,35 @@ export interface Good {
   img: string;
   /** Id cat id */
   id_cat_id: number;
+}
+
+export interface OrderGood {
+  /** Id */
+  id: number;
+  /** Id order */
+  id_order: number;
+  /**
+   * Namegood
+   * @minLength 1
+   */
+  namegood: string;
+}
+
+export interface Orders {
+  /** Id */
+  id: number;
+  /** Sum */
+  sum: number;
+  /**
+   * Addres
+   * @minLength 1
+   */
+  addres: string;
+  /**
+   * Users
+   * @minLength 1
+   */
+  users: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -414,8 +445,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     apiCartList: (
       query?: {
-        /** A search term. */
-        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },
@@ -503,8 +532,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     apiCartRead: (
       id: number,
       query?: {
-        /** A search term. */
-        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },
@@ -780,11 +807,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<
+        {
+          count: number;
+          /** @format uri */
+          next?: string | null;
+          /** @format uri */
+          previous?: string | null;
+          results: OrderGood[];
+        },
+        any
+      >({
         path: `/api/og/`,
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -796,11 +834,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/og/
      * @secure
      */
-    apiOgCreate: (params: RequestParams = {}) =>
-      this.request<void, any>({
+    apiOgCreate: (data: OrderGood, params: RequestParams = {}) =>
+      this.request<OrderGood, any>({
         path: `/api/og/`,
         method: "POST",
+        body: data,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -812,11 +852,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/og/
      * @secure
      */
-    apiOgUpdate: (params: RequestParams = {}) =>
-      this.request<void, any>({
+    apiOgUpdate: (data: OrderGood, params: RequestParams = {}) =>
+      this.request<OrderGood, any>({
         path: `/api/og/`,
         method: "PUT",
+        body: data,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -837,26 +879,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description Возвращает список всех заказов
+     * No description
      *
      * @tags api
      * @name ApiOrdersList
-     * @summary Список всех заказов
      * @request GET:/api/orders/
      * @secure
      */
     apiOrdersList: (
       query?: {
+        /** A search term. */
+        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, any>({
+      this.request<
+        {
+          count: number;
+          /** @format uri */
+          next?: string | null;
+          /** @format uri */
+          previous?: string | null;
+          results: Orders[];
+        },
+        any
+      >({
         path: `/api/orders/`,
         method: "GET",
         query: query,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -868,11 +922,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/api/orders/
      * @secure
      */
-    apiOrdersCreate: (params: RequestParams = {}) =>
-      this.request<void, any>({
+    apiOrdersCreate: (data: Orders, params: RequestParams = {}) =>
+      this.request<Orders, any>({
         path: `/api/orders/`,
         method: "POST",
+        body: data,
         secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -884,11 +940,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/orders/
      * @secure
      */
-    apiOrdersUpdate: (params: RequestParams = {}) =>
-      this.request<void, any>({
+    apiOrdersUpdate: (data: Orders, params: RequestParams = {}) =>
+      this.request<Orders, any>({
         path: `/api/orders/`,
         method: "PUT",
+        body: data,
         secure: true,
+        format: "json",
         ...params,
       }),
 

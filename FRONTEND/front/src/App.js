@@ -10,14 +10,11 @@ import Shoplist from "./pages/shoplist";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import {checkAuthenticated} from "./components/auth";
+import Orderuser from "./pages/orderuser";
 
 
 function App() {
     const [state, dispatch] = useReducer(Reducer,defaultState)
-    // useEffect(() => {
-    //     checkAuthenticated();
-    //     load_user();
-    // }, []);
   return (
       <div className="App">
 
@@ -80,6 +77,15 @@ function App() {
                   element={
                       <Context.Provider value={{dispatch, state}}>
                           <Register />
+                      </Context.Provider>
+                  }
+              >
+              </Route>
+              <Route
+                  path="/order"
+                  element={
+                      <Context.Provider value={{dispatch, state}}>
+                          <Orderuser />
                       </Context.Provider>
                   }
               >

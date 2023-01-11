@@ -1,16 +1,15 @@
-import React, {useContext, useEffect, useReducer, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {Card, Col, Row, Spinner,Button} from "react-bootstrap";
 import {CardActions, IconButton, Snackbar} from "@mui/material";
-import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { Api } from "../components/api/pharmacyApi.ts";
 import {Context} from "../components/reducer";
 import Cookies from "js-cookie";
-import axios from "axios";
+
 const api = new Api();
 
-const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =>{
+const getGoods = async (name2= '', min = "0", max="1000", name ='Супра') =>{
     const res = await api.api.apiGoodList({
         name: `${name2}`,
         min_price: `${min}`,
@@ -24,8 +23,6 @@ const getGoods = async (name2= '', min = "0", max="1000", name ='Супра' ) =
         })
     return res
 }
-
-
 
 
 const createCart = async (name, cost, img, user) =>{
@@ -66,8 +63,6 @@ function Catalog(props) {
     const [openAut, setOpenAut] = useState(false);
 
 
-    console.log(state)
-
     // поиск товара
     const handleSearch = async () =>{
         await setLoading(true);
@@ -75,6 +70,14 @@ function Catalog(props) {
         await setGood(results);
         await setLoading(false);
     }
+
+    useEffect( () => {
+        async function fetchData() {
+            const { results } = await getGoods('', min, max, searchValue);
+            await setGood(results);
+        }
+        fetchData();
+    },[])
 
     const handleAdd = async () =>{
         setOpen(true);
@@ -181,7 +184,6 @@ function Catalog(props) {
                         </Col>
                     })}
                 </Row>}
-
             </div>
         </>
     );

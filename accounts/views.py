@@ -1,3 +1,4 @@
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -8,6 +9,12 @@ from .serializers import UserSerializer
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils.decorators import method_decorator
 
+from django.http import HttpResponse
+from django.conf import settings
+import redis
+import uuid
+
+session_storage = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
 @method_decorator(csrf_protect, name='dispatch')
 class SignupView(APIView):
@@ -54,6 +61,7 @@ class GetCSRFToken(APIView):
 
 @method_decorator(csrf_protect, name='dispatch')
 class CheckAuthenticatedView(APIView):
+    permission_classes = (permissions.AllowAny,)
     def get(self, request):
         user = self.request.user
 
@@ -79,11 +87,15 @@ class LoginView(APIView):
         password = data['password']
 
         try:
-            user = auth.authenticate(username=username, password=password)
+            user = authenticate(username=username, password=password)
 
             if user is not None:
-                auth.login(request, user)
-                return Response({'success': 'User authenticated', "username": username})
+                random_key = str(uuid.uuid4())
+                session_storage.set(random_key, username)
+                response = HttpResponse('{"success": "User authenticated"}')
+                response.set_cookie("session_id", random_key)
+
+                return response
             else:
                 return Response({'error': 'Error Authenticating'})
         except:
@@ -94,7 +106,7 @@ class LogoutView(APIView):
     def post(self, request):
         try:
             auth.logout(request)
-            return Response({'success': 'Loggout Out'})
+            return Response({'success': 'Loggout'})
         except:
             return Response({'error': 'Something went wrong when logging out'})
 
@@ -112,7 +124,7 @@ class DeleteAccountView(APIView):
 
 
 class GetUsersView(APIView):
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
         users = User.objects.all()

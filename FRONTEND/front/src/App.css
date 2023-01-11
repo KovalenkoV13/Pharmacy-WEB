@@ -234,6 +234,10 @@ Card{
   position: relative;
 }
 
+.pagination{
+  margin-left: 250px;
+}
+
 /*shoplist.js*/
 .shoplistProd{
   display: flex;
@@ -255,6 +259,7 @@ Card{
 }
 
 .Suma{
+  position: fixed;
   display: inline-block;
   border-style: solid;
   border-radius: 3px;
@@ -262,7 +267,6 @@ Card{
   height: auto;
   background: white;
   box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
-  position: absolute;
   margin-left: 80px;
 }
 .Suma h4{

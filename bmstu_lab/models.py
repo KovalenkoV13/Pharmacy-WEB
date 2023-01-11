@@ -28,16 +28,17 @@ class Good(models.Model):
 
 
 class Ordergood(models.Model):
-    id_order = models.OneToOneField('Orders', models.DO_NOTHING, db_column='id_order', primary_key=True)
-    namegood = models.ForeignKey(Good, models.DO_NOTHING, db_column='namegood')
+    id = models.AutoField(primary_key=True)
+    id_order = models.IntegerField(blank=True, null=True)
+    namegood = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'ordergood'
-        unique_together = (('id_order', 'namegood'),)
 
 
 class Orders(models.Model):
+    id = models.AutoField(primary_key=True)
     sum = models.IntegerField(blank=True, null=True)
     addres = models.CharField(max_length=100, blank=True, null=True)
     users = models.IntegerField(blank=True, null=True)

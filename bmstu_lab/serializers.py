@@ -73,7 +73,6 @@ class OrdersSerializer(serializers.Serializer):
         return Orders.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.id = validated_data.get("id", instance.id)
         instance.sum = validated_data.get("sum", instance.sum)
         instance.addres = validated_data.get("addres", instance.addres)
         instance.users = validated_data.get("users", instance.users)
@@ -81,6 +80,7 @@ class OrdersSerializer(serializers.Serializer):
         return instance
 
 class OrderGoodSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     id_order = serializers.IntegerField()
     namegood = serializers.CharField()
 
@@ -88,6 +88,7 @@ class OrderGoodSerializer(serializers.Serializer):
         return Ordergood.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        instance.id = validated_data.get("id", instance.id)
         instance.id_order = validated_data.get("id_order", instance.id_order)
         instance.namegood = validated_data.get("namegood", instance.namegood)
         instance.save()
