@@ -331,6 +331,10 @@ Card{
     box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
     background: white;
   }
+  .email{
+    width: 300px;
+    margin-left: 100px;
+  }
   .username{
     width: 300px;
     margin-left: 100px;

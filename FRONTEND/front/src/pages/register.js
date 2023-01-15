@@ -11,13 +11,14 @@ export default function Register (){
     const { state, dispatch } = useContext(Context)
     const [formData, setFormData] = useState({
         username: '',
+        email: '',
         password: '',
         re_password: ''
     });
 
     const [accountCreated, setAccountCreated] = useState(false);
 
-    const { username, password, re_password } = formData;
+    const { username, email, password, re_password } = formData;
 
     function validateForm() {
         return formData.username.length > 0 && formData.password.length > 5 && formData.re_password.length > 5;
@@ -27,8 +28,8 @@ export default function Register (){
         e.preventDefault();
 
         if (password === re_password) {
-            console.log(username, password, re_password)
-            register(username, password, re_password).then(status => {
+            console.log(username, email, password, re_password)
+            register(username, email, password, re_password).then(status => {
                 dispatch({ type: status, payload: {} })
             })
             setAccountCreated(true);
@@ -51,6 +52,15 @@ export default function Register (){
                         type="text"
                         value={username}
                         onChange={(e) => setFormData({ ...formData, username : e.target.value })}
+                    />
+
+                </Form.Group>
+                <Form.Group className={"email"} controlId="email">
+                    <Form.Label>E-mail</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={email}
+                        onChange={(e) => setFormData({ ...formData, email : e.target.value })}
                     />
                 </Form.Group>
                 <Form.Group className={"password"} controlId="password">

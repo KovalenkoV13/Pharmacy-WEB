@@ -72,8 +72,6 @@ export interface Good {
    * @maxLength 100
    */
   img: string;
-  /** Id cat id */
-  id_cat_id: number;
 }
 
 export interface OrderGood {
@@ -94,15 +92,31 @@ export interface Orders {
   /** Sum */
   sum: number;
   /**
-   * Addres
+   * Adress
    * @minLength 1
    */
-  addres: string;
+  adress: string;
   /**
    * Users
    * @minLength 1
    */
   users: string;
+  /**
+   * Time create
+   * @format date
+   */
+  time_create: string;
+  /**
+   * Time update
+   * @format date
+   */
+  time_update: string;
+  goods: (string | null)[];
+  /**
+   * Status
+   * @minLength 1
+   */
+  status: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -766,9 +780,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/good/
      * @secure
      */
-    apiGoodUpdate: (data: Good, params: RequestParams = {}) =>
+    apiGoodUpdate: (name ,data: Good, params: RequestParams = {}) =>
       this.request<Good, any>({
-        path: `/api/good/`,
+        path: `/api/good/${name}/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -784,9 +798,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/api/good/
      * @secure
      */
-    apiGoodDelete: (params: RequestParams = {}) =>
+    apiGoodDelete: (name, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/api/good/`,
+        path: `/api/good/${name}/`,
         method: "DELETE",
         secure: true,
         ...params,
@@ -888,8 +902,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      */
     apiOrdersList: (
       query?: {
-        /** A search term. */
-        search?: string;
         /** A page number within the paginated result set. */
         page?: number;
       },
@@ -940,9 +952,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/api/orders/
      * @secure
      */
-    apiOrdersUpdate: (data: Orders, params: RequestParams = {}) =>
+    apiOrdersUpdate: (id, data: Orders, params: RequestParams = {}) =>
       this.request<Orders, any>({
-        path: `/api/orders/`,
+        path: `/api/orders/${id}/`,
         method: "PUT",
         body: data,
         secure: true,
@@ -961,6 +973,99 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     apiOrdersDelete: (params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/api/orders/`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags api
+     * @name ApiOrdersRead
+     * @request GET:/api/orders/{id}/
+     * @secure
+     */
+    apiOrdersRead: (
+      id: number,
+      query?: {
+        /** A page number within the paginated result set. */
+        page?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          count: number;
+          /** @format uri */
+          next?: string | null;
+          /** @format uri */
+          previous?: string | null;
+          results: Orders[];
+        },
+        any
+      >({
+        path: `/api/orders/${id}/`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags api
+     * @name ApiOrdersCreate2
+     * @request POST:/api/orders/{id}/
+     * @originalName apiOrdersCreate
+     * @duplicate
+     * @secure
+     */
+    apiOrdersCreate2: (id: number, data: Orders, params: RequestParams = {}) =>
+      this.request<Orders, any>({
+        path: `/api/orders/${id}/`,
+        method: "POST",
+        body: data,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags api
+     * @name ApiOrdersUpdate2
+     * @request PUT:/api/orders/{id}/
+     * @originalName apiOrdersUpdate
+     * @duplicate
+     * @secure
+     */
+    apiOrdersUpdate2: (id: number, data: Orders, params: RequestParams = {}) =>
+      this.request<Orders, any>({
+        path: `/api/orders/${id}/`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags api
+     * @name ApiOrdersDelete2
+     * @request DELETE:/api/orders/{id}/
+     * @originalName apiOrdersDelete
+     * @duplicate
+     * @secure
+     */
+    apiOrdersDelete2: (id: number, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/api/orders/${id}/`,
         method: "DELETE",
         secure: true,
         ...params,

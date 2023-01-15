@@ -87,7 +87,7 @@ const Header = (props) => {
                                 Каталог
                             </MenuItem>
 
-                            {state.isAuthenticated && <MenuItem
+                            {state.isAuthenticated && !state.isManager && <MenuItem
                                 routerLink={
                                     <Link to={"/shoplist"} />}
                                 icon={<AiOutlineShoppingCart color={'whitesmoke'} />}
@@ -102,7 +102,22 @@ const Header = (props) => {
                                 Корзина
                             </MenuItem>
                             }
-                            {state.isAuthenticated && <MenuItem
+                            {state.isAuthenticated && state.isManager && <MenuItem
+                                routerLink={
+                                    <Link to={"/order"} />}
+                                icon={<BsBasket3 color={'whitesmoke'} />}
+                                rootStyles={{
+                                    ['.' + menuClasses.button]: {
+                                        '&:hover': {
+                                            backgroundImage: 'linear-gradient(0deg, red 0%, darkred 100%)',
+                                        },
+                                    },
+                                }}
+                            >
+                                Все заказы
+                            </MenuItem>
+                            }
+                            {state.isAuthenticated && !state.isManager && <MenuItem
                                 routerLink={
                                     <Link to={"/order"} />}
                                 icon={<BsBasket3 color={'whitesmoke'} />}

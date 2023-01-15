@@ -1,3 +1,5 @@
+import json
+
 from django.forms import model_to_dict
 from django.shortcuts import render
 import django_filters.rest_framework
@@ -21,8 +23,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.conf import settings
 import redis
 
-session_storage = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+from user_profile.models import UserProfile
 
+session_storage = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
 
 class GoodView(ListView):
@@ -30,19 +33,17 @@ class GoodView(ListView):
     template_name = "order.html"
     context_object_name = 'good'
 
+
 def GetCatalog(request):
     good = Good.objects.all()
     return render(request, 'order.html', {"good": good})
+
 
 def GetMain(request):
     return render(request, 'categories.html')
 
 
-
-
-
-#API
-
+# API
 
 
 class CategoryView(generics.ListAPIView):
@@ -56,7 +57,6 @@ class CategoryView(generics.ListAPIView):
         operation_summary="Список категорий",
         operation_description="Возвращает категории"
     )
-
     def get(self, request):
         cat = Category.objects.all().values()
         return Response(list(cat))
@@ -101,6 +101,7 @@ class CategoryView(generics.ListAPIView):
 class GoodFilter(FilterSet):
     min_price = NumberFilter(field_name='cost', lookup_expr='gte')
     max_price = NumberFilter(field_name='cost', lookup_expr='lte')
+
     class Meta:
         model = Good
         fields = [
@@ -117,9 +118,6 @@ class GoodView(generics.ListCreateAPIView):
     filterset_class = GoodFilter
     search_fields = ["name"]
 
-
-
-
     @swagger_auto_schema(
         operation_summary="Список всех товаров",
         operation_description="Возвращает все товары",
@@ -132,25 +130,24 @@ class GoodView(generics.ListCreateAPIView):
         try:
             ssid = self.request.COOKIES["session_id"]
             user = str(session_storage.get(ssid).decode('utf-8'))
-            if user is not None:
+            user_profile = UserProfile.objects.get(user__username=user)
+            if user is not None and user_profile.ismanager == True:
                 post_new = Good.objects.create(
                     name=request.data["name"],
                     brand=request.data["brand"],
                     cost=request.data["cost"],
-                    img=request.data["img"],
-                    id_cat=request.data["id_cat"],
-                    vest=request.data["vest"],
+                    img=request.data["img"]
                 )
                 return Response({'good': model_to_dict(post_new)})
         except:
             return Response({'error': 'user is not authenticated and is not manager'})
 
-
     def put(self, request, *args, **kwargs):
         try:
             ssid = self.request.COOKIES["session_id"]
             user = str(session_storage.get(ssid).decode('utf-8'))
-            if user is not None:
+            user_profile = UserProfile.objects.get(user__username=user)
+            if user is not None and user_profile.ismanager == True:
                 pk = kwargs.get("pk", None)
                 if not pk:
                     return Response({"error": "Method PUT not allowed"})
@@ -166,7 +163,6 @@ class GoodView(generics.ListCreateAPIView):
                 return Response({"put": serializer.data})
         except:
             return Response({'error': 'user is not authenticated and is not manager'})
-
 
     def delete(self, request, **kwargs):
         try:
@@ -189,36 +185,51 @@ class GoodView(generics.ListCreateAPIView):
 class OrderView(generics.ListAPIView):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['users']
+
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['users']
 
     @swagger_auto_schema(
         operation_summary="Список всех заказов",
         operation_description="Возвращает список всех заказов",
     )
     def get_queryset(self):
-        order = Orders.objects.all()
-        return order
+        try:
+            ssid = self.request.COOKIES["session_id"]
+            user = str(session_storage.get(ssid).decode('utf-8'))
+            user_profile = UserProfile.objects.get(user__username=user)
+            if user is not None and user_profile.ismanager == False:
+                order = Orders.objects.filter(users__exact=user)
+                return order
+            if user is not None and user_profile.ismanager == True:
+                return Orders.objects.all()
+        except:
+            return []
 
     def post(self, request):
         try:
-            ssid = self.request.COOKIES["session_id"]
+            ssid = request.COOKIES["session_id"]
             user = str(session_storage.get(ssid).decode('utf-8'))
             if user is not None:
                 post_new = Orders.objects.create(
                     sum=request.data["sum"],
-                    addres=request.data["addres"],
-                    users=request.data["users"])
+                    adress=request.data["adress"],
+                    users=request.data["users"],
+                    goods=request.data["goods"],
+                    time_create=request.data["time_create"],
+                    time_update=request.data["time_update"],
+                    status=request.data["status"])
                 return Response({'order': model_to_dict(post_new)})
-        except:
-            return Response({'error': 'user is not authenticated'})
 
+        except:
+            return Response({'error': 'user is not authenticated or something went wrong'})
 
     def put(self, request, *args, **kwargs):
         try:
             ssid = self.request.COOKIES["session_id"]
             user = str(session_storage.get(ssid).decode('utf-8'))
-            if user is not None:
+            user_profile = UserProfile.objects.get(user__username=user)
+            if user is not None and user_profile.ismanager == True:
                 pk = kwargs.get("pk", None)
                 if not pk:
                     return Response({"error": "Method PUT not allowed"})
@@ -233,7 +244,8 @@ class OrderView(generics.ListAPIView):
                 serializer.save()
                 return Response({"put": serializer.data})
         except:
-            return Response({'error': 'user is not authenticated'})
+            return Response({'error': 'user is not authenticated and is not manager'})
+
 
     def delete(self, request, **kwargs):
         try:
@@ -251,8 +263,6 @@ class OrderView(generics.ListAPIView):
                 return Response({"del": "delete post " + str(pk)})
         except:
             return Response({'error': 'user is not authenticated'})
-
-
 
 
 class CartView(generics.ListCreateAPIView):
@@ -351,17 +361,15 @@ class OGView(generics.ListAPIView):
         return Response({"del": "delete post " + str(pk)})
 
 
-
 def GoodViewOne(request, pk):
     try:
         good = Good.objects.get(pk=pk)
     except Good.DoesNotExist:
         return HttpResponse(status=404)
 
-
     if request.method == 'GET':
         serializer = GoodSerializer(good)
-        return JsonResponse(serializer.data,  json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(serializer.data, json_dumps_params={'ensure_ascii': False})
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
@@ -369,16 +377,14 @@ def GoodViewOne(request, pk):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400,  json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(serializer.errors, status=400, json_dumps_params={'ensure_ascii': False})
 
     elif request.method == 'DELETE':
         good.delete()
         return HttpResponse(status=204)
 
 
-
 def CartViewOne(request, pk):
-
     try:
         cart = Cart.objects.get(pk=pk)
     except Cart.DoesNotExist:
@@ -386,10 +392,9 @@ def CartViewOne(request, pk):
 
     serializer_class = CartSerializer
 
-
     if request.method == 'GET':
         serializer = CartSerializer(cart)
-        return JsonResponse(serializer.data,  json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(serializer.data, json_dumps_params={'ensure_ascii': False})
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
@@ -397,18 +402,18 @@ def CartViewOne(request, pk):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400,  json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(serializer.errors, status=400, json_dumps_params={'ensure_ascii': False})
 
     elif request.method == 'DELETE':
         cart.delete()
         return HttpResponse(status=204)
+
+
 class GoodViewSet(viewsets.ModelViewSet):
     queryset = Good.objects.all()
     serializer_class = GoodSerializer
 
+
 class OrdersViewSet(viewsets.ModelViewSet):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
-
-
-

@@ -6,8 +6,38 @@ import {IconButton, Snackbar} from "@mui/material";
 import { Api } from "../components/api/pharmacyApi.ts";
 import {Context} from "../components/reducer";
 import Cookies from "js-cookie";
+import {StatusEnum} from "./orderuser";
 
 const api = new Api();
+
+const createOrder = async (sum, adress, users, time_create, time_update, goods, status) =>{
+    const res = await api.api.apiOrdersCreate(
+        {
+            sum: `${sum}`,
+            adress: `${adress}`,
+            users: `${users}`,
+            time_create: `${time_create}`,
+            time_update: `${time_update}`,
+            goods: goods,
+            status: `${status}`
+        },
+        {
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': Cookies.get('csrftoken')
+            }}
+    )
+        .then((response) => {
+            return response.data;
+        }).catch(()=>{
+            return {count:0, results:[]}
+        })
+    return res
+}
+
+
 
 const deleteCart = async (name) =>{
     const res = await api.api.apiCartDelete2(
@@ -53,6 +83,11 @@ const Shoplist = (props) => {
     const [adress, setAdr] = useState("2-я Бауманская ул., д.5, стр.1, Москва")
     const [open, setOpen] = useState(false);
     const [cart, setCart] = useState([])
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const day = date.getDate()
+
 
     useEffect( () => {
         async function fetchData() {
@@ -61,7 +96,6 @@ const Shoplist = (props) => {
         }
         fetchData();
     },[])
-
     const handleReload = async (name) =>{
         await deleteCart(name)
         const {results} = await getCart(state.id);
@@ -71,7 +105,11 @@ const Shoplist = (props) => {
 
     const handleAdd = async () =>{
         setOpen(true);
-
+        let goods = []
+        for (let i = 0; i < cart.length; i++){
+            goods.push(cart[i].name)
+        }
+        await createOrder(cart[0].cost, adress, state.id, `${year}-0${month+1}-${day}`, `${year}-0${month+1}-${day}`, goods, StatusEnum.Pending)
     }
     const handleClose = async () =>{
         setOpen(false);
@@ -96,18 +134,19 @@ const Shoplist = (props) => {
                     <p>{cart.length} товаров </p>}
                 {cart.map((data1) => {
                     return(
+                        <div>
                     <p>{data1.name}</p>
+                        </div>
                     )
                 })
                 }
-                <p>Адрес доставки</p>
-                <input value={adress} onChange={(event => setAdr(event.target.value))}/>
-
-                <Button
-                    onClick={handleAdd}
-                    variant={"dark"}>
-                    Оформить закзаз
-                </Button>
+                    <p>Адрес доставки</p>
+                    <input value={adress} onChange={(event => setAdr(event.target.value))}/>
+                    <Button
+                        onClick={handleAdd}
+                        variant={"dark"}>
+                        Оформить закзаз
+                    </Button>
             </div>
             <div className={"shoplistProduct"}>
                 {cart.map((data, index) => {

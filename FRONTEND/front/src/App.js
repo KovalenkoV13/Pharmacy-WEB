@@ -11,6 +11,7 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import {checkAuthenticated} from "./components/auth";
 import Orderuser from "./pages/orderuser";
+import NoMatch from "./pages/nomatch";
 
 
 function App() {
@@ -89,6 +90,12 @@ function App() {
                       </Context.Provider>
                   }
               >
+              </Route>
+              <Route
+                  path="*"
+                  element={
+                  <NoMatch />
+              }>
               </Route>
           </Routes>
         </BrowserRouter>

@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 from bmstu_lab.models import *
 
@@ -45,19 +47,17 @@ class GoodSerializer(serializers.Serializer):
     brand = serializers.CharField(max_length=1000)
     cost = serializers.FloatField()
     img = serializers.CharField(max_length=100)
-    id_cat_id = serializers.IntegerField()
-    vest = models.CharField(max_length=100)
+    # id_cat_id = serializers.IntegerField()
+    # vest = models.CharField(max_length=100)
 
     def create(self, validated_data):
         return Good.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
-        instance.description = validated_data.get("description", instance.description)
+        instance.brand = validated_data.get("brand", instance.brand)
         instance.cost = validated_data.get("cost", instance.cost)
         instance.img = validated_data.get("img", instance.img)
-        instance.id_cat = validated_data.get("id_cat", instance.id_cat)
-        instance.vest = validated_data.get("vest", instance.vest)
         instance.save()
         return instance
 
@@ -66,16 +66,25 @@ class GoodSerializer(serializers.Serializer):
 class OrdersSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     sum = serializers.IntegerField()
-    addres = serializers.CharField()
+    adress = serializers.CharField()
     users = serializers.CharField()
+    time_create = serializers.DateField(input_formats=["%d.%m.%Y"], format="%d.%m.%Y")
+    time_update = serializers.DateField(input_formats=["%d.%m.%Y"], format="%d.%m.%Y")
+    goods = serializers.ListField()
+    status = serializers.CharField()
 
     def create(self, validated_data):
-        return Orders.objects.create(**validated_data)
+        order = Orders.objects.create(**validated_data)
+        return order
 
     def update(self, instance, validated_data):
         instance.sum = validated_data.get("sum", instance.sum)
-        instance.addres = validated_data.get("addres", instance.addres)
+        instance.adress = validated_data.get("adress", instance.adress)
         instance.users = validated_data.get("users", instance.users)
+        instance.time_create = validated_data.get("time_create", instance.time_create)
+        instance.time_update = validated_data.get("time_update", instance.time_update)
+        instance.goods = validated_data.get("goods", instance.goods)
+        instance.status = validated_data.get("status", instance.status)
         instance.save()
         return instance
 

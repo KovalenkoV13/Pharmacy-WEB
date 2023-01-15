@@ -168,3 +168,5 @@ ALLOWED_HOSTS = ['172.20.10.2', '127.0.0.1']
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
+
+DATE_INPUT_FORMATS = ['%d.%m.%Y']

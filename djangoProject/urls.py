@@ -41,8 +41,9 @@ urlpatterns = [
     path('api/good/', views.GoodView.as_view()),
     path('api/cart/', views.CartView.as_view()),
     path('api/cart/<str:pk>/', views.CartView.as_view()),
-    path('api/good/<str:pk>/', views.GoodViewOne),
+    path('api/good/<str:pk>/', views.GoodView.as_view()),
     path('api/orders/', views.OrderView.as_view()),
+    path('api/orders/<int:pk>/', views.OrderView.as_view()),
     path('api/category/', views.CategoryView.as_view()),
     path('api/og/', views.OGView.as_view()),
 ]

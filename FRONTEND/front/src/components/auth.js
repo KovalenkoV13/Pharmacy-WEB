@@ -58,7 +58,7 @@ export const login = async (username, password) => {
         const res = await axios.post('http://127.0.0.1:8000/accounts/login', body, config)
 
         if (res.data.success) {
-            return {type: LOGIN_SUCCESS, payload: username}
+            return {type: LOGIN_SUCCESS, payload: {id: username, isManager: res.data.isManager}}
         } else {
             return {type: LOGIN_FAIL}
         }
@@ -67,7 +67,7 @@ export const login = async (username, password) => {
     }
 };
 
-export const register = async(username, password, re_password) => {
+export const register = async(username, email, password, re_password) => {
     const config = {
         withCredentials: true,
         headers: {
@@ -77,7 +77,7 @@ export const register = async(username, password, re_password) => {
         }
     };
 
-    const body = JSON.stringify({ username, password, re_password });
+    const body = JSON.stringify({ username, email, password, re_password });
 
     try {
         const res = await axios.post('http://127.0.0.1:8000/accounts/register', body, config)

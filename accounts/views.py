@@ -9,12 +9,13 @@ from .serializers import UserSerializer
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils.decorators import method_decorator
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
 import redis
 import uuid
 
 session_storage = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+
 
 @method_decorator(csrf_protect, name='dispatch')
 class SignupView(APIView):
@@ -24,6 +25,7 @@ class SignupView(APIView):
         data = self.request.data
 
         username = data['username']
+        email = data['email']
         password = data['password']
         re_password = data['re_password']
 
@@ -41,8 +43,7 @@ class SignupView(APIView):
 
                         user = User.objects.get(id=user.id)
 
-                        user_profile = UserProfile.objects.create(user=user, first_name='', last_name='', phone='',
-                                                                  city='')
+                        user_profile = UserProfile.objects.create(user=user, email=email, ismanager=False)
 
                         return Response({'success': 'User created successfully'})
             else:
@@ -62,6 +63,7 @@ class GetCSRFToken(APIView):
 @method_decorator(csrf_protect, name='dispatch')
 class CheckAuthenticatedView(APIView):
     permission_classes = (permissions.AllowAny,)
+
     def get(self, request):
         user = self.request.user
 
@@ -88,11 +90,15 @@ class LoginView(APIView):
 
         try:
             user = authenticate(username=username, password=password)
+            user_profile = UserProfile.objects.get(user=user)
 
             if user is not None:
                 random_key = str(uuid.uuid4())
                 session_storage.set(random_key, username)
-                response = HttpResponse('{"success": "User authenticated"}')
+                if user_profile.ismanager == False:
+                    response = JsonResponse({'success': 'User authenticated', 'isManager': False})
+                else:
+                    response = JsonResponse({'success': 'User authenticated', 'isManager': True})
                 response.set_cookie("session_id", random_key)
 
                 return response

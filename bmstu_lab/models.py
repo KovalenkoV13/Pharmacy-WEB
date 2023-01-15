@@ -37,17 +37,6 @@ class Ordergood(models.Model):
         db_table = 'ordergood'
 
 
-class Orders(models.Model):
-    id = models.AutoField(primary_key=True)
-    sum = models.IntegerField(blank=True, null=True)
-    addres = models.CharField(max_length=100, blank=True, null=True)
-    users = models.IntegerField(blank=True, null=True)
-    time_create = models.DateField(blank=True, null=True)
-    time_update = models.DateField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'orders'
 
 
 
@@ -61,6 +50,21 @@ class Cart(models.Model):
     class Meta:
         managed = False
         db_table = 'cart'
+
+
+
+class Orders(models.Model):
+    sum = models.BigIntegerField(blank=True, null=True)
+    adress = models.CharField(max_length=255, blank=True, null=True)
+    users = models.CharField(max_length=100, blank=True, null=True)
+    time_create = models.DateField(blank=True, null=True)
+    time_update = models.DateField(blank=True, null=True)
+    goods = models.Field(blank=True, null=True)
+    status = models.CharField(max_length=30, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'orders'
 
 
 

@@ -43,8 +43,9 @@ export const Reducer = (state, action) => {
             console.log("LOGIN_SUCCESS ID", payload)
             return {
                 ...state,
-                id: payload,
-                isAuthenticated: true
+                id: payload.id,
+                isAuthenticated: true,
+                isManager: payload.isManager
             }
         case LOGIN_FAIL:
             console.log("LOGIN_SUCCESS ID", payload)
