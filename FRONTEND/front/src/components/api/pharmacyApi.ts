@@ -903,6 +903,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     apiOrdersList: (
       query?: {
         /** A page number within the paginated result set. */
+        time_update_after?: string;
+        time_update_before?: string;
+        status?: string;
         page?: number;
       },
       params: RequestParams = {},

@@ -14,7 +14,7 @@ from bmstu_lab.models import *
 from rest_framework import generics
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import filters
-from django_filters import FilterSet, rest_framework
+from django_filters import FilterSet, rest_framework, CharFilter, IsoDateTimeFromToRangeFilter
 from django_filters import NumberFilter
 from django.http import HttpResponse
 from rest_framework.response import Response
@@ -182,12 +182,18 @@ class GoodView(generics.ListCreateAPIView):
             return Response({'error': 'user is not authenticated and is not manager'})
 
 
+class OrderFilter(FilterSet):
+    time_update = IsoDateTimeFromToRangeFilter()
+    status = CharFilter()
+    class Meta:
+        model = Orders
+        fields = ['time_update', 'status']
+
+
 class OrderView(generics.ListAPIView):
     queryset = Orders.objects.all()
     serializer_class = OrdersSerializer
-
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ['users']
+    filterset_class = OrderFilter
 
     @swagger_auto_schema(
         operation_summary="Список всех заказов",

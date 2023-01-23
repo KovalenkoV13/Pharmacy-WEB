@@ -32,8 +32,8 @@ const Product = (props) => {
             return(
                 <div className={"containerProduct"}>
                     <div className="BR">
-                        <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-                            / <Link className="Br_Link" to="/catalog">Каталог</Link> / {id}</p>
+                        <p className="Br_p">
+                            <Link className="Br_Link" to="/">Каталог</Link> / {id}</p>
                     </div>
                     <Row xs={4} md={4} className="g-4">
                         {good.map((data) => {

@@ -224,10 +224,10 @@ function Catalog(props) {
         <>
             <div className="conteinerCatalog">
 
-                <div className="BR">
-                    <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
-                        / Каталог</p>
-                </div>
+                {/*<div className="BR">*/}
+                {/*    <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>*/}
+                {/*        / Каталог</p>*/}
+                {/*</div>*/}
                 {loading && <div className="loadingBg"><Spinner animation="border"/></div>}
                 <div className={"inputForm"}>
                 <div className="inputGood">

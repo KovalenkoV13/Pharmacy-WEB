@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {Col, Row, Card, Button} from "react-bootstrap";
+import {Col, Row, Card, Button, Form} from "react-bootstrap";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {IconButton, Snackbar} from "@mui/material";
 import { Api } from "../components/api/pharmacyApi.ts";
@@ -49,8 +49,13 @@ const updateOrder = async (order ,sum, adress, users, time_create, time_update, 
 }
 
 
-const getOrder = async (user = '') =>{
-    const res = await api.api.apiOrdersList({},
+const getOrder = async (time_update_after = '', time_update_before = '', status = '' ) =>{
+    const res = await api.api.apiOrdersList({
+            time_update_after: `${time_update_after}`,
+            time_update_before: `${time_update_before}`,
+            status: `${status}`
+        },
+
         {
             credentials: 'include',
             headers: {
@@ -72,6 +77,10 @@ const Orderuser = (props) => {
     const [adress, setAdr] = useState("2-я Бауманская ул., д.5, стр.1, Москва")
     const [open, setOpen] = useState(false);
     const [cart, setCart] = useState([])
+    const [status, setStatus] = useState("")
+    const [before, setBefore] = useState("")
+    const [after, setAfter] = useState("")
+
     const date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth()
@@ -86,8 +95,14 @@ const Orderuser = (props) => {
     },[])
 
     const handleReload = async () =>{
-        const {results} = await getOrder();
-        await setCart(results);
+        if (status === 'Все') {
+            const {results} = await getOrder(after, before, '');
+            await setCart(results);
+        }
+        else {
+            const {results} = await getOrder(after, before, status);
+            await setCart(results);
+        }
     }
 
 
@@ -100,8 +115,41 @@ const Orderuser = (props) => {
     return(
         <div className={"containerShoplist"}>
             <div className="BR">
-                <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
+                <p className="Br_p"><Link className="Br_Link" to="/">Каталог </Link>
                     / Заказ</p>
+            </div>
+            <div className={"Suma"}>
+               <Form.Group className={"dateOrder"}>
+                   <Form.Label>C даты</Form.Label>
+                   <Form.Control
+                       type={"date"}
+                       onChange={(event => setAfter(event.target.value))}
+                   ></Form.Control>
+               </Form.Group>
+                <Form.Group className={"dateOrder"}>
+                    <Form.Label>По дату</Form.Label>
+                    <Form.Control
+                        type={"date"}
+                        onChange={(event => setBefore(event.target.value))}
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group className={"status"}>
+                    <Form.Label>Статус</Form.Label>
+                <Form.Select aria-label="status" style={{
+                    width: "100%",
+                }}
+                             onChange={(event => setStatus(event.target.value))}
+                >
+                    <option>Все</option>
+                    <option>{StatusEnum.Pending}</option>
+                    <option>{StatusEnum.Confirmed}</option>
+                    <option>{StatusEnum.Denied}</option>
+                    <option>{StatusEnum.InProgress}</option>
+                    <option>{StatusEnum.Delivery}</option>
+                    <option>{StatusEnum.Done}</option>
+                </Form.Select>
+                </Form.Group>
+                <Button variant={"dark"} className={"reloadOrders"}  onClick={handleReload}>Применить фильтры</Button>
             </div>
             <div className={"shoplistProduct"}>
                 {cart.map((data, index) => {
@@ -122,17 +170,26 @@ const Orderuser = (props) => {
                                 <p><b>Клиент:</b> {data.users}</p>
                                 }
                                 <p><b>Статус:</b> {data.status}</p>
+                                {(data.status == StatusEnum.Confirmed || data.status == StatusEnum.Delivery || data.status == StatusEnum.InProgress) &&
+                                    <p><b>Дата обновления статуса:</b> {data.time_update}</p>
+                                }
+                                {data.status == StatusEnum.Done &&
+                                    <p><b>Дата доставки:</b> {data.time_update}</p>
+                                }
+                                {data.status == StatusEnum.Denied &&
+                                    <p><b>Дата завершения:</b> {data.time_update}</p>
+                                }
                                 {data.status == StatusEnum.Pending && state.isManager &&
                                     <>
                                         <Button
                                             variant="success"
                                             style={{marginRight: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Confirmed)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Confirmed); handleReload()}}
                                               >Подтвердить</Button>
                                         <Button
                                             variant="danger"
                                             style={{marginLeft: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied); handleReload()}}
                                                 >Отклонить</Button>
                                     </>
 
@@ -142,12 +199,12 @@ const Orderuser = (props) => {
                                         <Button
                                             variant="success"
                                             style={{marginRight: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Delivery)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Delivery); handleReload()}}
                                         >Передан в доставку</Button>
                                         <Button
                                             variant="danger"
                                             style={{marginLeft: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied); handleReload()}}
                                         >Отклонить</Button>
                                     </>
                                 }
@@ -156,12 +213,12 @@ const Orderuser = (props) => {
                                         <Button
                                             variant="success"
                                             style={{marginRight: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.InProgress)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.InProgress); handleReload()}}
                                         >Доставляется</Button>
                                         <Button
                                             variant="danger"
                                             style={{marginLeft: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied); handleReload()}}
                                         >Отклонить</Button>
                                     </>
                                 }
@@ -170,12 +227,12 @@ const Orderuser = (props) => {
                                         <Button
                                             variant="success"
                                             style={{marginRight: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Done)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Done); handleReload()}}
                                         >Выполнить</Button>
                                         <Button
                                             variant="danger"
                                             style={{marginLeft: "6px"}}
-                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied)}}
+                                            onClick={()=>{updateOrder(data.id, data.sum, data.adress, data.users, data.time_create, `${day}.0${month+1}.${year}`, data.goods, StatusEnum.Denied); handleReload()}}
                                         >Отклонить</Button>
                                     </>
 

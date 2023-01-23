@@ -110,6 +110,7 @@ const Shoplist = (props) => {
             goods.push(cart[i].name)
         }
         await createOrder(cart[0].cost, adress, state.id, `${year}-0${month+1}-${day}`, `${year}-0${month+1}-${day}`, goods, StatusEnum.Pending)
+
     }
     const handleClose = async () =>{
         setOpen(false);
@@ -118,7 +119,7 @@ const Shoplist = (props) => {
     return(
         <div className={"containerShoplist"}>
             <div className="BR">
-                <p className="Br_p"><Link className="Br_Link" to="/">Главная </Link>
+                <p className="Br_p"><Link className="Br_Link" to="/">Каталог </Link>
                      / Корзина</p>
             </div>
             <div className={"Suma"}>

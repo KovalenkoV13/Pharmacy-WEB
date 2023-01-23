@@ -29,20 +29,22 @@ function App() {
             <Route
                 exact path="/"
                 element={
-                        <Main />
-                }
-            >
-            </Route>
-
-            <Route
-                path="/catalog/"
-                element={
                     <Context.Provider value={{dispatch, state}}>
                         <Catalog />
                     </Context.Provider>
                 }
             >
             </Route>
+
+            {/*<Route*/}
+            {/*    path="/catalog/"*/}
+            {/*    element={*/}
+            {/*        <Context.Provider value={{dispatch, state}}>*/}
+            {/*            <Catalog />*/}
+            {/*        </Context.Provider>*/}
+            {/*    }*/}
+            {/*>*/}
+            {/*</Route>*/}
             <Route
                 path="/catalog/':id'/"
                 element={

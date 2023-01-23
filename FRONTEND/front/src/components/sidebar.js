@@ -58,24 +58,24 @@ const Header = (props) => {
 
                               }}
                         >
-                            <MenuItem
-                                routerLink={
-                                <Link to={"/"} />
-                            }
-                                icon={<FiHome color={'whitesmoke'} />}
-                                rootStyles={{
-                                    ['.' + menuClasses.button]: {
-                                        '&:hover': {
-                                            backgroundImage: 'linear-gradient(0deg, red 0%, darkred 100%)',
-                                        },
-                                    },
-                                }}
-                            >
-                                Главная
-                            </MenuItem>
+                            {/*<MenuItem*/}
+                            {/*    routerLink={*/}
+                            {/*    <Link to={"/"} />*/}
+                            {/*}*/}
+                            {/*    icon={<FiHome color={'whitesmoke'} />}*/}
+                            {/*    rootStyles={{*/}
+                            {/*        ['.' + menuClasses.button]: {*/}
+                            {/*            '&:hover': {*/}
+                            {/*                backgroundImage: 'linear-gradient(0deg, red 0%, darkred 100%)',*/}
+                            {/*            },*/}
+                            {/*        },*/}
+                            {/*    }}*/}
+                            {/*>*/}
+                            {/*    Главная*/}
+                            {/*</MenuItem>*/}
                             <MenuItem
                                 icon={<FaList color = {'whitesmoke'} />}
-                                routerLink={<Link to={"/catalog"} />}
+                                routerLink={<Link to={"/"} />}
                                 rootStyles={{
                                     ['.' + menuClasses.button]: {
                                         '&:hover': {
