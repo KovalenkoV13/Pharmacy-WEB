@@ -251,6 +251,7 @@ function Catalog(props) {
                 </div>}
                 {good.length && <Row xs={3} md={3} className="g-4">
                     {good.map((data) => {
+                        console.log(good);
                         return <Col className={data.name}>
                             <Snackbar
                                 open={open}
